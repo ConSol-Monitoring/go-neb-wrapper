@@ -37,7 +37,8 @@ func Neb_Module_Init(flags int, args string) C.int {
 	C.neb_set_module_info(unsafe.Pointer(C.neb_handle), C.NEBMODULE_MODINFO_LICENSE, C.CString("GPL v3"))
 	C.neb_set_module_info(unsafe.Pointer(C.neb_handle), C.NEBMODULE_MODINFO_DESC, C.CString("This module just shows that it is possible to write neb modules in golang."))
 
-	RegisterCallback(C.NEBCALLBACK_PROCESS_DATA, Process_Data_Callback)
+	InitCallbacks()
+	AddCallback(C.NEBCALLBACK_PROCESS_DATA, Process_Data_Callback)
 
 	return C.NEB_OK
 }
@@ -45,7 +46,7 @@ func Neb_Module_Init(flags int, args string) C.int {
 //export Neb_Module_Deinit
 func Neb_Module_Deinit(flags, reason int) C.int {
 	Log(C.NSLOG_INFO_MESSAGE, fmt.Sprintf("[%s] deinitializing\n", NAME))
-
+	DeinitCallbacks()
 	return C.NEB_OK
 }
 

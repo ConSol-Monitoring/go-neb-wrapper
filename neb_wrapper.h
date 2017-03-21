@@ -10,7 +10,7 @@ nebmodule *neb_handle;
 
 extern int Neb_Module_Init(int flags, char *args);
 extern int Neb_Module_Deinit(int flags, int reason);
-extern int Process_Data_Callback(int type, void* data);
+extern int generic_Callback(int type, void* data);
 
 int nebmodule_init( int flags, char *args, nebmodule *handle ) {
     neb_handle = handle;
@@ -21,7 +21,7 @@ int nebmodule_deinit( int flags, int reason ) {
     return(Neb_Module_Deinit(flags, reason));
 }
 
-int process_data_callback(int type,  void* data) {
-   return(Process_Data_Callback(type, data));
+int generic_callback(int type,  void* data) {
+   return(Generic_Callback(type, data));
 }
 

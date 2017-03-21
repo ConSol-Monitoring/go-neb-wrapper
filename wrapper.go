@@ -15,6 +15,10 @@ void RegisterCallback(int type, void*callback) {
 	neb_register_callback(type, neb_handle, 0, callback);
 }
 
+void DeregisterCallback(int type, void*callback) {
+	neb_deregister_callback(type, callback);
+}
+
 */
 import "C"
 import "unsafe"
@@ -25,7 +29,12 @@ func Log(lvl int64, data string) {
 	C.Log(C.int(lvl), cs)
 }
 
-func RegisterCallback(callbacktype int64, callback func(int, unsafe.Pointer) int) {
-	// TODO: use function pointer from args instead of hardcoded
-	C.RegisterCallback(C.int(callbacktype), C.process_data_callback)
+//RegisterGenericCallback capsules the c function neb_register_callback and passes the generic_callback handler
+func RegisterGenericCallback(callbacktype int64) {
+	C.RegisterCallback(C.int(callbacktype), C.generic_callback)
+}
+
+//DeregisterGenericCallback capsules the c function neb_deregister_callback and passes the generic_callback handler
+func DeregisterGenericCallback(callbacktype int64) {
+	C.DeregisterCallback(C.int(callbacktype), C.generic_callback)
 }
