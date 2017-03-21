@@ -1,4 +1,4 @@
-go-naemon-broker-module
-go-naemon-broker-module.h
+go-neb-wrapper
+go-neb-wrapper.h
 .idea/
 _obj
