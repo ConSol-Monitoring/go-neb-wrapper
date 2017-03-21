@@ -7,6 +7,9 @@ GOVERSION:=$(shell go version | awk '{print $$3}' | sed 's/^go\([0-9]\.[0-9]\).*
 all: deps fmt build
 
 deps: versioncheck dump
+	if ! [ -x goimports ]; then \
+	  go get golang.org/x/tools/cmd/goimports; \
+	fi
 
 updatedeps: versioncheck
 
@@ -85,7 +88,7 @@ fmt:
 versioncheck:
 	@[ "$(GOVERSION)" = "devel" ] || [ $$(echo "$(GOVERSION)" | tr -d ".") -ge 15 ] || { \
 		echo "**** ERROR:"; \
-		echo "**** LMD requires at least golang version 1.5 or higher"; \
+		echo "**** Naemon_neb requires at least golang version 1.5 or higher"; \
 		echo "**** this is: $$(go version)"; \
 		exit 1; \
 	}
