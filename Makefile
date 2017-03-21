@@ -7,9 +7,6 @@ GOVERSION:=$(shell go version | awk '{print $$3}' | sed 's/^go\([0-9]\.[0-9]\).*
 all: deps fmt build
 
 deps: versioncheck dump
-	if ! [ -x goimports ]; then \
-	  go get golang.org/x/tools/cmd/goimports; \
-	fi
 
 updatedeps: versioncheck
 
@@ -81,6 +78,7 @@ clean:
 	rm -f coverage.html
 
 fmt:
+	go get -u golang.org/x/tools/cmd/goimports
 	goimports -w .
 	go tool vet -all -shadow -assign -atomic -bool -composites -copylocks -nilfunc -rangeloops -unsafeptr -unreachable .
 	gofmt -w -s .
