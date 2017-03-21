@@ -26,5 +26,6 @@ func Log(lvl int64, data string) {
 }
 
 func RegisterCallback(callbacktype int64, callback func(int, unsafe.Pointer) int) {
+	// TODO: use function pointer from args instead of hardcoded
 	C.RegisterCallback(C.int(callbacktype), C.process_data_callback)
 }
