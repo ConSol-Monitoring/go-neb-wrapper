@@ -22,6 +22,7 @@ func log(lvl int64, data string) {
 	C.Log(C.int(lvl), cs)
 }
 
+//CoreLog passes the given string to the core which logs in the configured file
 func CoreLog(msg string) {
 	log(NslogInfoMessage, msg)
 }

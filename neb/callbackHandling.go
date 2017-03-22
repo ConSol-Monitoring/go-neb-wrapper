@@ -22,6 +22,7 @@ type callbackMapping map[int][]Callback
 var usedCallbackMapping = callbackMapping{}
 var callbackMutex = sync.Mutex{}
 
+//CallbackTimeout is the duration each callback has to return.
 var CallbackTimeout = time.Duration(10) * time.Millisecond
 
 //Generic_Callback this is a mapping function for C. Don't use it.
