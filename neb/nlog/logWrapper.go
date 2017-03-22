@@ -16,6 +16,7 @@ void Log(int lvl, char* data) { nm_log(lvl, data); }
 import "C"
 import (
 	"unsafe"
+
 	"github.com/davecgh/go-spew/spew"
 )
 

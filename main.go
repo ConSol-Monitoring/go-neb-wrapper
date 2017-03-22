@@ -7,17 +7,21 @@ import (
 	"github.com/ConSol/go-neb-wrapper/neb"
 	"github.com/ConSol/go-neb-wrapper/neb/naemon"
 	"github.com/ConSol/go-neb-wrapper/neb/nlog"
+	"github.com/ConSol/go-neb-wrapper/neb/structs"
 )
 
 // Build contains the current git commit id
 // compile passing -ldflags "-X main.Build <build sha1>" to set the id.
 var Build string
 
+//an example function how to handle multiple events at one function
 func genericCallback(callbackType int, data unsafe.Pointer, returnChannel chan int) {
 	nlog.CoreLog(fmt.Sprintf("[%s] Generic Callback for %d\n", neb.Name, callbackType))
 	switch callbackType {
 	case naemon.ProcessData:
-		neb.Dump(neb.CastProcessStruct(data))
+		neb.Dump(structs.CastProcess(data))
+	case naemon.HostStatusData:
+		neb.Dump(structs.CastHostStatus(data))
 	default:
 		fmt.Println(fmt.Sprintf("[%s] Unkown CallbackType: %d\n", neb.Name, callbackType))
 	}
@@ -35,7 +39,6 @@ func init() {
 	neb.Version = fmt.Sprintf("1.0.0 - %s", Build)
 	neb.Author = "Philip Griesbacher / Sven Nierlein"
 
-
 	// this functions will be called every time a ProcessData event is triggered
 	exampleCallback1 := func(callbackType int, data unsafe.Pointer, returnChannel chan int) {
 		fmt.Printf("Example Callback1 for %d\n", callbackType)
@@ -52,9 +55,8 @@ func init() {
 	neb.AddCallback(naemon.ProcessData, exampleCallback1)
 	neb.AddCallback(naemon.ProcessData, exampleCallback2)
 
-
 	neb.AddCallback(naemon.ProcessData, genericCallback)
-	neb.AddCallback(naemon.ProcessData, genericCallback)
+	neb.AddCallback(naemon.HostStatusData, genericCallback)
 
 	//Init Hook Example
 	neb.NebModuleInitHook = func(flags int, args string) int {
