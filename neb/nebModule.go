@@ -35,12 +35,12 @@ var Desc = ""
 
 //NebModuleInitHook gives you access to the flags and args which the core passes to the brokers, when it's loading your code.
 //This function will be called at the end of the init function
-//return NebOk if everything went well
+//return Ok if everything went well
 var NebModuleInitHook func(flags int, args string) int
 
 //NebModuleDeinitHook gives you access to the flags and reason which the core passes to the brokers, when it's unloading your code.
 //This function will be called at the end of the deinit function
-//return NebOk if everything went well
+//return Ok if everything went well
 var NebModuleDeinitHook func(flags, reason int) int
 
 //export Neb_Module_Init
@@ -63,7 +63,7 @@ func Neb_Module_Init(flags int, args *C.char) C.int {
 	initCallbacks()
 
 	//default returncode
-	returnCode := NebOk
+	returnCode := Ok
 	//load Init hook if needed
 	if NebModuleInitHook != nil {
 		returnCode = NebModuleInitHook(flags, C.GoString(args))
@@ -83,7 +83,7 @@ func Neb_Module_Deinit(flags, reason int) C.int {
 	//unload callbacks
 	deinitCallbacks()
 	//default returncode
-	returnCode := NebOk
+	returnCode := Ok
 	//load Init hook if needed
 	if NebModuleInitHook != nil {
 		returnCode = NebModuleDeinitHook(flags, reason)
@@ -97,5 +97,5 @@ func DumperCallback(callbacktype int, data unsafe.Pointer) int {
 	Dump("Dumper_Callback:")
 	Dump(callbacktype)
 	Dump(data)
-	return NebOk
+	return Ok
 }

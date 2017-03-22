@@ -28,7 +28,7 @@ var CallbackTimeout = time.Duration(10) * time.Millisecond
 //Generic_Callback this is a mapping function for C. Don't use it.
 //export Generic_Callback
 func Generic_Callback(callbackType int, data unsafe.Pointer) int {
-	returnCode := NebOk
+	returnCode := Ok
 	var callbacks []Callback
 	var contains bool
 
@@ -55,7 +55,7 @@ func Generic_Callback(callbackType int, data unsafe.Pointer) int {
 		case result = <-c:
 			resultList[i] = result
 		case <-time.After(CallbackTimeout):
-			return NebError
+			return Error
 		}
 	}
 
