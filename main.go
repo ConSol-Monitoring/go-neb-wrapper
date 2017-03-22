@@ -23,13 +23,22 @@ func init() {
 	neb.Version = fmt.Sprintf("1.0.0 - %s", Build)
 	neb.Author = "Philip Griesbacher / Sven Nierlein"
 
-	// this function will be called every time a ProcessData event is triggered
-	exampleCallback := func(int, unsafe.Pointer) int {
-		fmt.Println("Example Callback")
-		nlog.CoreLog(fmt.Sprintf("[%s] Example Callback logged\n", neb.Name))
-		return neb.NebOk
+	// this functions will be called every time a ProcessData event is triggered
+	exampleCallback1 := func(callbackType int, data unsafe.Pointer, returnChannel chan int) {
+		fmt.Printf("Example Callback1 for %d\n", callbackType)
+		nlog.CoreLog(fmt.Sprintf("[%s] Example Callback1 logged for %d\n", neb.Name, callbackType))
+		returnChannel <- neb.NebOk
+		close(returnChannel)
 	}
-	neb.AddCallback(naemon.NebcallbackProcessData, exampleCallback)
+	exampleCallback2 := func(callbackType int, data unsafe.Pointer, returnChannel chan int) {
+		fmt.Printf("Example Callback2 for %d\n", callbackType)
+		nlog.CoreLog(fmt.Sprintf("[%s] Example Callback2 logged for %d\n", neb.Name, callbackType))
+		returnChannel <- neb.NebOk
+		close(returnChannel)
+	}
+	//There can be multiple of them
+	neb.AddCallback(naemon.NebcallbackProcessData, exampleCallback1)
+	neb.AddCallback(naemon.NebcallbackProcessData, exampleCallback2)
 
 	//Init Hook Example
 	neb.NebModuleInitHook = func(flags int, args string) int {
@@ -48,4 +57,6 @@ func init() {
 	}
 
 }
+
+//DON'T USE MAIN, IT WILL NEVER BE CALLED! USE CALLBACKS.
 func main() {}
