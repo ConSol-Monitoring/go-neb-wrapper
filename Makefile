@@ -98,12 +98,12 @@ lint:
 	# Only works with Go 1.6 or up.
 	#
 	@( [ "$(GOVERSION)" != "devel" ] && [ $$(echo "$(GOVERSION)" | tr -d ".") -lt 16 ] ) || { \
-		go get -u github.com/golang/lint/golint; \
-		golint -set_exit_status .; \
+		go get github.com/golang/lint/golint; \
+		golint -set_exit_status ./...; \
 	}
 
 cyclo:
-	go get -u github.com/fzipp/gocyclo
+	go get github.com/fzipp/gocyclo
 	#
 	# Check if there are any too complicated functions
 	# Any function with a score higher than 15 is bad.
