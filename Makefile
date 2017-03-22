@@ -11,13 +11,13 @@ deps: versioncheck dump
 updatedeps: versioncheck
 
 dump:
-	if [ $(shell grep -rc Dump *.go | grep -v :0 | grep -v dump.go | wc -l) -ne 0 ]; then \
-		go get github.com/davecgh/go-spew/spew; \
-		sed -i.bak 's/\/\/ +build.*/\/\/ build with debug functions/' dump.go; \
-	else \
-		sed -i.bak 's/\/\/ build.*/\/\/ +build ignore/' dump.go; \
-	fi
-	rm -f dump.go.bak
+#	if [ $(shell grep -rc Dump *.go | grep -v :0 | grep -v dump.go | wc -l) -ne 0 ]; then \
+#		go get github.com/davecgh/go-spew/spew; \
+#		sed -i.bak 's/\/\/ +build.*/\/\/ build with debug functions/' dump.go; \
+#	else \
+#		sed -i.bak 's/\/\/ build.*/\/\/ +build ignore/' dump.go; \
+#	fi
+#	rm -f dump.go.bak
 
 build: dump
 	go build -buildmode=c-shared -ldflags "-s -w -X main.Build=$(shell git rev-parse --short HEAD)"
@@ -78,7 +78,7 @@ clean:
 	rm -f coverage.html
 
 fmt:
-	go get -u golang.org/x/tools/cmd/goimports
+	# go get -u golang.org/x/tools/cmd/goimports
 	goimports -w .
 	go tool vet -all -shadow -assign -atomic -bool -composites -copylocks -nilfunc -rangeloops -unsafeptr -unreachable .
 	gofmt -w -s .

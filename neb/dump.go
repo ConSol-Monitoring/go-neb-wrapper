@@ -1,6 +1,6 @@
 // build with debug functions
 
-package main
+package neb
 
 import (
 	"fmt"

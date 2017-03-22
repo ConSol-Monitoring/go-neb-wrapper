@@ -1,4 +1,4 @@
-package main
+package neb
 
 /* This file contains the glue for calling naemon functions from
  * the golang neb module.
