@@ -1,0 +1,37 @@
+package nagios3
+
+const (
+	NebcallbackReserved0 = iota
+	NebcallbackReserved1
+	NebcallbackReserved2
+	NebcallbackReserved3
+	NebcallbackReserved4
+	NebcallbackRawData
+	NebcallbackNebData
+	NebcallbackProcessData
+	NebcallbackTimedEventData
+	NebcallbackLogData
+	NebcallbackSystemCommandData
+	NebcallbackEventHandlerData
+	NebcallbackNotificationData
+	NebcallbackServiceCheckData
+	NebcallbackHostCheckData
+	NebcallbackCommentData
+	NebcallbackDowntimeData
+	NebcallbackFlappingData
+	NebcallbackProgramStatusData
+	NebcallbackHostStatusData
+	NebcallbackServiceStatusData
+	NebcallbackAdaptiveProgramData
+	NebcallbackAdaptiveHostData
+	NebcallbackAdaptiveServiceData
+	NebcallbackExternalCommandData
+	NebcallbackAggregatedStatusData
+	NebcallbackRetentionData
+	NebcallbackContactNotificationData
+	NebcallbackContactNotificationMethodData
+	NebcallbackAcknowledgementData
+	NebcallbackStateChangeData
+	NebcallbackContactStatusData
+	NebcallbackAdaptiveContactData
+)
