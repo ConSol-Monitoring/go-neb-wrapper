@@ -33,9 +33,7 @@ func Neb_Module_Init(flags int, args string) C.int {
 	for infoType, value := range modinfoMapping {
 		setModuleInfo(handle, infoType, value)
 	}
-	InitCallbacks()
-	AddCallback(C.NEBCALLBACK_PROCESS_DATA, Dumper_Callback)
-
+	initCallbacks()
 	return C.NEB_OK
 }
 
@@ -48,7 +46,7 @@ func setModuleInfo(handle unsafe.Pointer, infoType C.int, value string) {
 //export Neb_Module_Deinit
 func Neb_Module_Deinit(flags, reason int) C.int {
 	Log(C.NSLOG_INFO_MESSAGE, fmt.Sprintf("[%s] deinitializing\n", Name))
-	DeinitCallbacks()
+	deinitCallbacks()
 	return C.NEB_OK
 }
 
