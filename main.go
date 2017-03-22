@@ -6,6 +6,7 @@ import (
 
 	"github.com/ConSol/go-neb-wrapper/neb"
 	"github.com/ConSol/go-neb-wrapper/neb/naemon"
+	"github.com/ConSol/go-neb-wrapper/neb/nlog"
 )
 
 // Build contains the current git commit id
@@ -25,6 +26,7 @@ func init() {
 	// this function will be called every time a ProcessData event is triggered
 	exampleCallback := func(int, unsafe.Pointer) int {
 		fmt.Println("Example Callback")
+		nlog.CoreLog(fmt.Sprintf("[%s] Example Callback logged\n", neb.Name))
 		return neb.NebOk
 	}
 	neb.AddCallback(naemon.NebcallbackProcessData, exampleCallback)

@@ -9,8 +9,6 @@ package neb
 #cgo CFLAGS: -I.
 #include "neb_wrapper.h"
 
-void Log(int lvl, char* data) { nm_log(lvl, data); }
-
 void RegisterCallback(int type, void*callback) {
 	neb_register_callback(type, neb_handle, 0, callback);
 }
@@ -21,13 +19,6 @@ void DeregisterCallback(int type, void*callback) {
 
 */
 import "C"
-import "unsafe"
-
-func Log(lvl int64, data string) {
-	cs := C.CString(data)
-	defer C.free(unsafe.Pointer(cs))
-	C.Log(C.int(lvl), cs)
-}
 
 //RegisterGenericCallback capsules the c function neb_register_callback and passes the generic_callback handler
 func RegisterGenericCallback(callbacktype int64) {

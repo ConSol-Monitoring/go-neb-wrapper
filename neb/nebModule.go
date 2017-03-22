@@ -11,6 +11,8 @@ import "C"
 import (
 	"fmt"
 	"unsafe"
+
+	"github.com/ConSol/go-neb-wrapper/neb/nlog"
 )
 
 //Name is used for some default logs
@@ -52,15 +54,22 @@ func Neb_Module_Init(flags int, args *C.char) C.int {
 		C.NEBMODULE_MODINFO_LICENSE: License,
 		C.NEBMODULE_MODINFO_DESC:    Desc,
 	}
+	//write module info
 	for infoType, value := range modinfoMapping {
 		setModuleInfo(handle, infoType, value)
 	}
-	initCallbacks()
-	if NebModuleInitHook == nil {
-		return NebOk
-	}
-	return C.int(NebModuleInitHook(flags, C.GoString(args)))
 
+	//set callbacks
+	initCallbacks()
+
+	//default returncode
+	returnCode := NebOk
+	//load Init hook if needed
+	if NebModuleInitHook != nil {
+		returnCode = NebModuleInitHook(flags, C.GoString(args))
+	}
+	nlog.CoreLog(fmt.Sprintf("[%s] finished Init\n", Name))
+	return C.int(returnCode)
 }
 
 func setModuleInfo(handle unsafe.Pointer, infoType C.int, value string) {
@@ -71,12 +80,16 @@ func setModuleInfo(handle unsafe.Pointer, infoType C.int, value string) {
 
 //export Neb_Module_Deinit
 func Neb_Module_Deinit(flags, reason int) C.int {
-	Log(C.NSLOG_INFO_MESSAGE, fmt.Sprintf("[%s] deinitializing Callbacks\n", Name))
+	//unload callbacks
 	deinitCallbacks()
-	if NebModuleInitHook == nil {
-		return NebOk
+	//default returncode
+	returnCode := NebOk
+	//load Init hook if needed
+	if NebModuleInitHook != nil {
+		returnCode = NebModuleDeinitHook(flags, reason)
 	}
-	return C.int(NebModuleDeinitHook(flags, reason))
+	nlog.CoreLog(fmt.Sprintf("[%s] finished Deinit\n", Name))
+	return C.int(returnCode)
 }
 
 //DumperCallback dummy dumper
