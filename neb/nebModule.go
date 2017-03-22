@@ -13,16 +13,38 @@ import (
 	"unsafe"
 )
 
-var Name = ""
+//Name is used for some default logs
+var Name = "go_neb_broker"
+
+//Title is used for the module info
 var Title = ""
+
+//Author is used for the module info
 var Author = ""
+
+//Version is used for the module info
 var Version = ""
+
+//License is used for the module info
 var License = ""
+
+//Desc is used for the module info
 var Desc = ""
 
+//NebModuleInitHook gives you access to the flags and args which the core passes to the brokers, when it's loading your code.
+//This function will be called at the end of the init function
+//return NebOk if everything went well
+var NebModuleInitHook func(flags int, args string) int
+
+//NebModuleDeinitHook gives you access to the flags and reason which the core passes to the brokers, when it's unloading your code.
+//This function will be called at the end of the deinit function
+//return NebOk if everything went well
+var NebModuleDeinitHook func(flags, reason int) int
+
 //export Neb_Module_Init
-func Neb_Module_Init(flags int, args string) C.int {
+func Neb_Module_Init(flags int, args *C.char) C.int {
 	handle := unsafe.Pointer(C.neb_handle)
+	defer C.free(unsafe.Pointer(args))
 	modinfoMapping := map[C.int]string{
 		C.NEBMODULE_MODINFO_TITLE:   Title,
 		C.NEBMODULE_MODINFO_AUTHOR:  Author,
@@ -34,7 +56,12 @@ func Neb_Module_Init(flags int, args string) C.int {
 		setModuleInfo(handle, infoType, value)
 	}
 	initCallbacks()
-	return C.NEB_OK
+	if NebModuleInitHook == nil {
+		return NebOk
+	} else {
+		return C.int(NebModuleInitHook(flags, C.GoString(args)))
+	}
+
 }
 
 func setModuleInfo(handle unsafe.Pointer, infoType C.int, value string) {
@@ -45,14 +72,18 @@ func setModuleInfo(handle unsafe.Pointer, infoType C.int, value string) {
 
 //export Neb_Module_Deinit
 func Neb_Module_Deinit(flags, reason int) C.int {
-	Log(C.NSLOG_INFO_MESSAGE, fmt.Sprintf("[%s] deinitializing\n", Name))
+	Log(C.NSLOG_INFO_MESSAGE, fmt.Sprintf("[%s] deinitializing Callbacks\n", Name))
 	deinitCallbacks()
-	return C.NEB_OK
+	if NebModuleInitHook == nil {
+		return NebOk
+	} else {
+		return C.int(NebModuleDeinitHook(flags, reason))
+	}
 }
 
 func Dumper_Callback(callbacktype int, data unsafe.Pointer) int {
 	Dump("Dumper_Callback:")
 	Dump(callbacktype)
 	Dump(data)
-	return (C.NEB_OK)
+	return NebOk
 }
