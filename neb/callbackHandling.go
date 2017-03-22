@@ -10,15 +10,15 @@ extern nebmodule *neb_handle;
 import "C"
 import "unsafe"
 
+//Callback defines an function, which will be called by the core
 type Callback func(int, unsafe.Pointer) int
-type CallbackMapping map[int][]Callback
+type callbackMapping map[int][]Callback
 
-var usedCallbackMapping = CallbackMapping{}
+var usedCallbackMapping = callbackMapping{}
 
 //export Generic_Callback
 func Generic_Callback(callbackType int, data unsafe.Pointer) int {
 	//TODO: parallel execution
-	Dump("Generic")
 	returnCode := C.NEB_OK
 	if calls, ok := usedCallbackMapping[callbackType]; ok {
 		for _, c := range calls {
@@ -35,16 +35,14 @@ func AddCallback(callbackType int, callback Callback) {
 	usedCallbackMapping[callbackType] = append(usedCallbackMapping[callbackType], callback)
 }
 
-func InitCallbacks() {
-	//TODO: change range
-	for i := int64(0); i < 2; i++ {
-		RegisterGenericCallback(i)
+func initCallbacks() {
+	for callbackType := range usedCallbackMapping {
+		RegisterGenericCallback(int64(callbackType))
 	}
 }
 
-func DeinitCallbacks() {
-	//TODO: change range
-	for i := int64(0); i < 2; i++ {
-		DeregisterGenericCallback(i)
+func deinitCallbacks() {
+	for callbackType := range usedCallbackMapping {
+		RegisterGenericCallback(int64(callbackType))
 	}
 }
