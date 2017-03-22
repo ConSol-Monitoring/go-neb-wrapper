@@ -58,9 +58,8 @@ func Neb_Module_Init(flags int, args *C.char) C.int {
 	initCallbacks()
 	if NebModuleInitHook == nil {
 		return NebOk
-	} else {
-		return C.int(NebModuleInitHook(flags, C.GoString(args)))
 	}
+	return C.int(NebModuleInitHook(flags, C.GoString(args)))
 
 }
 
@@ -76,12 +75,12 @@ func Neb_Module_Deinit(flags, reason int) C.int {
 	deinitCallbacks()
 	if NebModuleInitHook == nil {
 		return NebOk
-	} else {
-		return C.int(NebModuleDeinitHook(flags, reason))
 	}
+	return C.int(NebModuleDeinitHook(flags, reason))
 }
 
-func Dumper_Callback(callbacktype int, data unsafe.Pointer) int {
+//DumperCallback dummy dumper
+func DumperCallback(callbacktype int, data unsafe.Pointer) int {
 	Dump("Dumper_Callback:")
 	Dump(callbacktype)
 	Dump(data)

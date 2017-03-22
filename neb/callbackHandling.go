@@ -16,6 +16,7 @@ type callbackMapping map[int][]Callback
 
 var usedCallbackMapping = callbackMapping{}
 
+//Generic_Callback this is a mapping function for C. Don't use it.
 //export Generic_Callback
 func Generic_Callback(callbackType int, data unsafe.Pointer) int {
 	//TODO: parallel execution
@@ -31,6 +32,7 @@ func Generic_Callback(callbackType int, data unsafe.Pointer) int {
 	return returnCode
 }
 
+//AddCallback can be uses to register a function for a certain event
 func AddCallback(callbackType int, callback Callback) {
 	usedCallbackMapping[callbackType] = append(usedCallbackMapping[callbackType], callback)
 }
