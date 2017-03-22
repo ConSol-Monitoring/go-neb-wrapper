@@ -1,30 +1,30 @@
 package nagios4
 
 const (
-	NebcallbackProcessData = iota
-	NebcallbackTimedEventData
-	NebcallbackLogData
-	NebcallbackSystemCommandData
-	NebcallbackEventHandlerData
-	NebcallbackNotificationData
-	NebcallbackServiceCheckData
-	NebcallbackHostCheckData
-	NebcallbackCommentData
-	NebcallbackDowntimeData
-	NebcallbackFlappingData
-	NebcallbackProgramStatusData
-	NebcallbackHostStatusData
-	NebcallbackServiceStatusData
-	NebcallbackAdaptiveProgramData
-	NebcallbackAdaptiveHostData
-	NebcallbackAdaptiveServiceData
-	NebcallbackExternalCommandData
-	NebcallbackAggregatedStatusData
-	NebcallbackRetentionData
-	NebcallbackContactNotificationData
-	NebcallbackContactNotificationMethodData
-	NebcallbackAcknowledgementData
-	NebcallbackStateChangeData
-	NebcallbackContactStatusData
-	NebcallbackAdaptiveContactData
+	ProcessData = iota
+	TimedEventData
+	LogData
+	SystemCommandData
+	EventHandlerData
+	NotificationData
+	ServiceCheckData
+	HostCheckData
+	CommentData
+	DowntimeData
+	FlappingData
+	ProgramStatusData
+	HostStatusData
+	ServiceStatusData
+	AdaptiveProgramData
+	AdaptiveHostData
+	AdaptiveServiceData
+	ExternalCommandData
+	AggregatedStatusData
+	RetentionData
+	ContactNotificationData
+	ContactNotificationMethodData
+	AcknowledgementData
+	StateChangeData
+	ContactStatusData
+	AdaptiveContactData
 )

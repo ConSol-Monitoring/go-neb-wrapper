@@ -1,34 +1,34 @@
 package neb
 
 const (
-	//NebOk OK
-	NebOk = 0
-	//NebError Error
-	NebError = -1
-	// NebTrue True
-	NebTrue = 1
-	//NebFalse False
-	NebFalse = 0
-	//NeberrorNomem memory could not be allocated
-	NeberrorNomem = 100
-	//NeberrorNocallbackfunc no callback function was specified
-	NeberrorNocallbackfunc = 200
-	// NeberrorNocallbacklist callback list not initialized
-	NeberrorNocallbacklist = 201
-	//NeberrorCallbackbounds callback type was out of bounds
-	NeberrorCallbackbounds = 202
-	//NeberrorCallbacknotfound the callback could not be found
-	NeberrorCallbacknotfound = 203
-	//NeberrorNomodulehandle no module handle specified
-	NeberrorNomodulehandle = 204
-	//NeberrorBadmodulehandle bad module handle
-	NeberrorBadmodulehandle = 205
-	//NeberrorCallbackoverride module wants to override default Nagios handling of event
-	NeberrorCallbackoverride = 206
-	//NeberrorCallbackcancel module wants to cancel callbacks to other modules
-	NeberrorCallbackcancel = 207
-	//NeberrorNomodule no module was specified
-	NeberrorNomodule = 300
-	//NeberrorModinfobounds module info index was out of bounds
-	NeberrorModinfobounds = 400
+	//Ok OK
+	Ok = 0
+	//Error Error
+	Error = -1
+	// True True
+	True = 1
+	//False False
+	False = 0
+	//errorNomem memory could not be allocated
+	ErrorNomem = 100
+	//errorNocallbackfunc no callback function was specified
+	ErrorNocallbackfunc = 200
+	// errorNocallbacklist callback list not initialized
+	ErrorNocallbacklist = 201
+	//errorCallbackbounds callback type was out of bounds
+	ErrorCallbackbounds = 202
+	//errorCallbacknotfound the callback could not be found
+	ErrorCallbacknotfound = 203
+	//errorNomodulehandle no module handle specified
+	ErrorNomodulehandle = 204
+	//errorBadmodulehandle bad module handle
+	ErrorBadmodulehandle = 205
+	//errorCallbackoverride module wants to override default Nagios handling of event
+	ErrorCallbackoverride = 206
+	//errorCallbackcancel module wants to cancel callbacks to other modules
+	ErrorCallbackcancel = 207
+	//errorNomodule no module was specified
+	ErrorNomodule = 300
+	//errorModinfobounds module info index was out of bounds
+	ErrorModinfobounds = 400
 )
