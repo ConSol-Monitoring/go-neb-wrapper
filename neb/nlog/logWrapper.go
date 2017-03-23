@@ -18,6 +18,8 @@ import (
 	"unsafe"
 
 	"github.com/davecgh/go-spew/spew"
+	"fmt"
+	"os"
 )
 
 func log(lvl int64, data string) {
@@ -37,4 +39,13 @@ func CoreDump(v interface{}) {
 	spew.Config.MaxDepth = 20
 	spew.Config.DisableMethods = true
 	CoreLog(spew.Sdump(v))
+}
+
+//Dump can be uses to dump any data to stderr
+func Dump(v interface{}) {
+	spew.Config.DisablePointerMethods = true
+	spew.Config.Indent = "\t"
+	spew.Config.MaxDepth = 20
+	spew.Config.DisableMethods = true
+	fmt.Fprintf(os.Stderr, spew.Sdump(v))
 }
