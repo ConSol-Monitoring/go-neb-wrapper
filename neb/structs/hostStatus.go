@@ -2,7 +2,6 @@ package structs
 
 /*
 #include "naemon/naemon.h"
-#include <stdlib.h>
 #cgo pkg-config: naemon
 #cgo CFLAGS: -I.
 */
@@ -12,10 +11,7 @@ import (
 )
 
 type HostStatus struct {
-	Type      int
-	Flags     int
-	Attr      int
-	Timestamp Timeval
+	Process
 	ObjectPtr unsafe.Pointer
 }
 
@@ -23,12 +19,11 @@ type HostStatus struct {
 func CastHostStatus(data unsafe.Pointer) HostStatus {
 	st := *((*C.struct_nebstruct_host_status_struct)(data))
 	return HostStatus{
-		Type:  int(st._type),
-		Flags: int(st.flags),
-		Attr:  int(st.attr),
-		Timestamp: Timeval{
-			TvSec:  int(st.timestamp.tv_sec),
-			TvUsec: int(st.timestamp.tv_usec),
+		Process:Process{
+			Type:  int(st._type),
+			Flags: int(st.flags),
+			Attr:  int(st.attr),
+			Timestamp: CastTimevalStruct(st.timestamp),
 		},
 		ObjectPtr: st.object_ptr,
 	}

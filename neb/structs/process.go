@@ -26,9 +26,6 @@ func CastProcess(data unsafe.Pointer) Process {
 		Type:  int(st._type),
 		Flags: int(st.flags),
 		Attr:  int(st.attr),
-		Timestamp: Timeval{
-			TvSec:  int(st.timestamp.tv_sec),
-			TvUsec: int(st.timestamp.tv_usec),
-		},
+		Timestamp: CastTimevalStruct(st.timestamp),
 	}
 }
