@@ -5,7 +5,6 @@ import (
 	"unsafe"
 
 	"github.com/ConSol/go-neb-wrapper/neb"
-	"github.com/ConSol/go-neb-wrapper/neb/naemon"
 	"github.com/ConSol/go-neb-wrapper/neb/nlog"
 	"github.com/ConSol/go-neb-wrapper/neb/structs"
 )
@@ -18,13 +17,13 @@ var Build string
 func genericCallback(callbackType int, data unsafe.Pointer) int {
 	nlog.CoreLog(fmt.Sprintf("[%s] Generic Callback for %d\n", neb.Name, callbackType))
 	switch callbackType {
-	case naemon.ProcessData:
+	case neb.ProcessData:
 		nlog.Dump(structs.CastProcess(data))
-	case naemon.HostStatusData:
+	case neb.HostStatusData:
 		nlog.Dump(structs.CastHostStatus(data))
-	case naemon.ServiceCheckData:
+	case neb.ServiceCheckData:
 		nlog.Dump(structs.CastServiceCheck(data))
-	case naemon.HostCheckData:
+	case neb.HostCheckData:
 		nlog.Dump(structs.CastHostCheck(data))
 	default:
 		fmt.Println(fmt.Sprintf("[%s] Unkown CallbackType: %d\n", neb.Name, callbackType))
@@ -54,11 +53,11 @@ func init() {
 		return neb.Ok
 	}
 	//There can be multiple of them
-	neb.AddCallback(naemon.ProcessData, exampleCallback1)
-	neb.AddCallback(naemon.ProcessData, exampleCallback2)
+	neb.AddCallback(neb.ProcessData, exampleCallback1)
+	neb.AddCallback(neb.ProcessData, exampleCallback2)
 
 	//And a lot more
-	for _, t := range []int{naemon.ProcessData, naemon.HostStatusData, naemon.ServiceCheckData, naemon.HostCheckData} {
+	for _, t := range []int{neb.ProcessData, neb.HostStatusData, neb.ServiceCheckData, neb.HostCheckData} {
 		neb.AddCallback(t, genericCallback)
 
 	}
