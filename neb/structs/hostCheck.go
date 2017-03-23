@@ -8,7 +8,6 @@ package structs
 import "C"
 import (
 	"unsafe"
-	"github.com/ConSol/go-neb-wrapper/neb/nlog"
 )
 
 //HostCheck host check structure
@@ -39,7 +38,6 @@ type HostCheck struct {
 //CastHostCheck tries to cast the pointer to an go struct
 func CastHostCheck(data unsafe.Pointer) HostCheck {
 	st := *((*C.struct_nebstruct_host_check_struct)(data))
-	nlog.Dump(st)
 	return HostCheck{
 		Process:CastProcess(data),
 		HostName:C.GoString(st.host_name),
