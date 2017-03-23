@@ -16,7 +16,7 @@ import (
 
 //Callback defines an function, which will be called by the core
 //Return your result in the channel
-type Callback func(int, unsafe.Pointer, chan int)
+type Callback func(int, unsafe.Pointer) int
 type callbackMapping map[int][]Callback
 
 var usedCallbackMapping = callbackMapping{}
@@ -48,7 +48,9 @@ func Generic_Callback(callbackType int, data unsafe.Pointer) int {
 	resultList := make([]int, callbackAmount)
 	//start all handlers for this callback
 	for i, c := range callbacks {
-		go c(callbackType, data, resultChannels[i])
+		go func(result chan int, call Callback) {
+			result <- call(callbackType, data)
+		}(resultChannels[i], c)
 	}
 
 	//Wait for all callbacks to signal that they are done and collect the returncodes

@@ -15,7 +15,7 @@ import (
 var Build string
 
 //an example function how to handle multiple events at one function
-func genericCallback(callbackType int, data unsafe.Pointer, returnChannel chan int) {
+func genericCallback(callbackType int, data unsafe.Pointer) int {
 	nlog.CoreLog(fmt.Sprintf("[%s] Generic Callback for %d\n", neb.Name, callbackType))
 	switch callbackType {
 	case naemon.ProcessData:
@@ -29,8 +29,8 @@ func genericCallback(callbackType int, data unsafe.Pointer, returnChannel chan i
 	default:
 		fmt.Println(fmt.Sprintf("[%s] Unkown CallbackType: %d\n", neb.Name, callbackType))
 	}
-	returnChannel <- neb.Ok
-	close(returnChannel)
+	return neb.Ok
+
 }
 
 //This is an example main file, which should demonstrate how to use the library.
@@ -44,16 +44,14 @@ func init() {
 	neb.Author = "Philip Griesbacher / Sven Nierlein"
 
 	// this functions will be called every time a ProcessData event is triggered
-	exampleCallback1 := func(callbackType int, data unsafe.Pointer, returnChannel chan int) {
+	exampleCallback1 := func(callbackType int, data unsafe.Pointer) int {
 		fmt.Printf("Example Callback1 for %d\n", callbackType)
 		nlog.CoreLog(fmt.Sprintf("[%s] Example Callback1 logged for %d\n", neb.Name, callbackType))
-		returnChannel <- neb.Ok
-		close(returnChannel)
+		return neb.Ok
 	}
-	exampleCallback2 := func(callbackType int, data unsafe.Pointer, returnChannel chan int) {
+	exampleCallback2 := func(callbackType int, data unsafe.Pointer) int {
 		nlog.CoreLog(fmt.Sprintf("[%s] Example Callback2 logged for %d\n", neb.Name, callbackType))
-		returnChannel <- neb.Ok
-		close(returnChannel)
+		return neb.Ok
 	}
 	//There can be multiple of them
 	neb.AddCallback(naemon.ProcessData, exampleCallback1)
