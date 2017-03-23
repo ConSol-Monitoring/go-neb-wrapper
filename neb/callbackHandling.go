@@ -42,6 +42,9 @@ func Generic_Callback(callbackType int, data unsafe.Pointer) int {
 	}
 
 	resultChannels := make([]chan int, callbackAmount)
+	for i := range resultChannels {
+		resultChannels[i] = make(chan int, 1)
+	}
 	resultList := make([]int, callbackAmount)
 	//start all handlers for this callback
 	for i, c := range callbacks {
