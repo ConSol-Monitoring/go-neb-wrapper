@@ -1,11 +1,7 @@
 package neb
 
 /*
-
 #include "naemon/naemon.h"
-
-extern nebmodule *neb_handle;
-
 */
 import "C"
 import (
