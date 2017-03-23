@@ -19,9 +19,13 @@ func genericCallback(callbackType int, data unsafe.Pointer, returnChannel chan i
 	nlog.CoreLog(fmt.Sprintf("[%s] Generic Callback for %d\n", neb.Name, callbackType))
 	switch callbackType {
 	case naemon.ProcessData:
-		neb.Dump(structs.CastProcess(data))
+		nlog.Dump(structs.CastProcess(data))
 	case naemon.HostStatusData:
-		neb.Dump(structs.CastHostStatus(data))
+		nlog.Dump(structs.CastHostStatus(data))
+	case naemon.ServiceCheckData:
+		nlog.Dump(structs.CastServiceCheck(data))
+	case naemon.HostCheckData:
+		nlog.Dump(structs.CastHostCheck(data))
 	default:
 		fmt.Println(fmt.Sprintf("[%s] Unkown CallbackType: %d\n", neb.Name, callbackType))
 	}
@@ -32,7 +36,7 @@ func genericCallback(callbackType int, data unsafe.Pointer, returnChannel chan i
 //This is an example main file, which should demonstrate how to use the library.
 func init() {
 	// just some information about your plugin
-	neb.Title = "GO GO Neb Wrapper!"
+	neb.Title = "GO GO Neb Wrapper! *\\o/*"
 	neb.Name = neb.Title
 	neb.Desc = "This is an example how to use the go neb wrapper"
 	neb.License = "GPL v3"
@@ -55,8 +59,11 @@ func init() {
 	neb.AddCallback(naemon.ProcessData, exampleCallback1)
 	neb.AddCallback(naemon.ProcessData, exampleCallback2)
 
-	neb.AddCallback(naemon.ProcessData, genericCallback)
-	neb.AddCallback(naemon.HostStatusData, genericCallback)
+	//And a lot more
+	for _, t := range []int{naemon.ProcessData, naemon.HostStatusData, naemon.ServiceCheckData, naemon.HostCheckData} {
+		neb.AddCallback(t, genericCallback)
+
+	}
 
 	//Init Hook Example
 	neb.NebModuleInitHook = func(flags int, args string) int {
