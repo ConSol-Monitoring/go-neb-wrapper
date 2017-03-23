@@ -1,34 +1,39 @@
 package neb
 
+/*
+#include "naemon/naemon.h"
+*/
+import "C"
+
 const (
 	//Ok OK
-	Ok = 0
+	Ok = C.NEB_OK
 	//Error Error
-	Error = -1
+	Error = C.NEB_ERROR
 	// True True
-	True = 1
+	True = C.NEB_TRUE
 	//False False
-	False = 0
+	False = C.NEB_FALSE
 	//errorNomem memory could not be allocated
-	ErrorNomem = 100
+	ErrorNomem = C.NEBERROR_NOMEM
 	//errorNocallbackfunc no callback function was specified
-	ErrorNocallbackfunc = 200
+	ErrorNocallbackfunc = C.NEBERROR_NOCALLBACKFUNC
 	// errorNocallbacklist callback list not initialized
-	ErrorNocallbacklist = 201
+	ErrorNocallbacklist = C.NEBERROR_NOCALLBACKLIST
 	//errorCallbackbounds callback type was out of bounds
-	ErrorCallbackbounds = 202
+	ErrorCallbackbounds = C.NEBERROR_CALLBACKBOUNDS
 	//errorCallbacknotfound the callback could not be found
-	ErrorCallbacknotfound = 203
+	ErrorCallbacknotfound = C.NEBERROR_CALLBACKNOTFOUND
 	//errorNomodulehandle no module handle specified
-	ErrorNomodulehandle = 204
+	ErrorNomodulehandle = C.NEBERROR_NOMODULEHANDLE
 	//errorBadmodulehandle bad module handle
-	ErrorBadmodulehandle = 205
+	ErrorBadmodulehandle = C.NEBERROR_BADMODULEHANDLE
 	//errorCallbackoverride module wants to override default Nagios handling of event
-	ErrorCallbackoverride = 206
+	ErrorCallbackoverride = C.NEBERROR_CALLBACKOVERRIDE
 	//errorCallbackcancel module wants to cancel callbacks to other modules
-	ErrorCallbackcancel = 207
+	ErrorCallbackcancel = C.NEBERROR_CALLBACKCANCEL
 	//errorNomodule no module was specified
-	ErrorNomodule = 300
+	ErrorNomodule = C.NEBERROR_NOMODULE
 	//errorModinfobounds module info index was out of bounds
-	ErrorModinfobounds = 400
+	ErrorModinfobounds = C.NEBERROR_MODINFOBOUNDS
 )
