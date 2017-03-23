@@ -91,11 +91,3 @@ func Neb_Module_Deinit(flags, reason int) C.int {
 	nlog.CoreLog(fmt.Sprintf("[%s] finished Deinit\n", Name))
 	return C.int(returnCode)
 }
-
-//DumperCallback dummy dumper
-func DumperCallback(callbacktype int, data unsafe.Pointer) int {
-	Dump("Dumper_Callback:")
-	Dump(callbacktype)
-	Dump(data)
-	return Ok
-}
