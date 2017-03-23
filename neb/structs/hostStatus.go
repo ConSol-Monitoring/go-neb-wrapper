@@ -19,10 +19,10 @@ type HostStatus struct {
 func CastHostStatus(data unsafe.Pointer) HostStatus {
 	st := *((*C.struct_nebstruct_host_status_struct)(data))
 	return HostStatus{
-		Process:Process{
-			Type:  int(st._type),
-			Flags: int(st.flags),
-			Attr:  int(st.attr),
+		Process: Process{
+			Type:      int(st._type),
+			Flags:     int(st.flags),
+			Attr:      int(st.attr),
 			Timestamp: CastTimevalStruct(st.timestamp),
 		},
 		ObjectPtr: st.object_ptr,

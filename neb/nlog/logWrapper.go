@@ -17,9 +17,10 @@ import "C"
 import (
 	"unsafe"
 
-	"github.com/davecgh/go-spew/spew"
 	"fmt"
 	"os"
+
+	"github.com/davecgh/go-spew/spew"
 )
 
 func log(lvl int64, data string) {

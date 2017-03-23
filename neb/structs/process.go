@@ -23,9 +23,9 @@ type Process struct {
 func CastProcess(data unsafe.Pointer) Process {
 	st := *((*C.struct_nebstruct_process_struct)(data))
 	return Process{
-		Type:  int(st._type),
-		Flags: int(st.flags),
-		Attr:  int(st.attr),
+		Type:      int(st._type),
+		Flags:     int(st.flags),
+		Attr:      int(st.attr),
 		Timestamp: CastTimevalStruct(st.timestamp),
 	}
 }
