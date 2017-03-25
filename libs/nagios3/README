@@ -1,0 +1,4 @@
+There files are taken directly from mk-livestatus-1.2.6p16.
+
+These files are taken directly from Nagios 3.2.0 with a minimal patch
+that fixes one compilation error on g++.
