@@ -5,12 +5,28 @@ package nlog
  */
 
 /*
-#include "naemon/naemon.h"
-#include <stdlib.h>
-#cgo pkg-config: naemon
-#cgo CFLAGS: -I.
 
+#cgo nagios3 CFLAGS: -DNAGIOS3 -I. -I${SRCDIR}/../../libs
+#cgo nagios3 LDFLAGS: -Wl,-unresolved-symbols=ignore-all
+
+#cgo nagios4 CFLAGS: -DNAGIOS4 -I. -I${SRCDIR}/../../libs
+#cgo nagios4 LDFLAGS: -Wl,-unresolved-symbols=ignore-all
+
+#cgo naemon CFLAGS: -DNAEMON -I.
+#cgo naemon pkg-config: naemon
+
+#include "../dependencies.h"
+
+#if defined(NAGIOS3)
+#include "../../libs/nagios3/nebcallbacks.h"
+void Log(int lvl, char* data) { }
+#elif defined(NAGIOS4)
+#include "../../libs/nagios4/nebcallbacks.h"
+void Log(int lvl, char* data) { }
+#elif defined(NAEMON)
+#include "naemon/naemon.h"
 void Log(int lvl, char* data) { nm_log(lvl, data); }
+#endif
 
 */
 import "C"

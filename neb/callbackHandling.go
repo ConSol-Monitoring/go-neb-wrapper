@@ -1,8 +1,5 @@
 package neb
 
-/*
-#include "naemon/naemon.h"
-*/
 import "C"
 import (
 	"sync"

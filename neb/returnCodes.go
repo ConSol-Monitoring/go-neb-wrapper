@@ -1,7 +1,16 @@
 package neb
 
 /*
-#include "naemon/naemon.h"
+
+#cgo nagios3 CFLAGS: -DNAGIOS3 -I. -I${SRCDIR}/../libs
+#cgo nagios3 LDFLAGS: -L${SRCDIR}/libs/nagios3
+#cgo nagios4 CFLAGS: -DNAGIOS4 -I. -I${SRCDIR}/../libs
+
+#cgo naemon CFLAGS: -DNAEMON
+#cgo naemon pkg-config: naemon
+
+#include "dependencies.h"
+
 */
 import "C"
 

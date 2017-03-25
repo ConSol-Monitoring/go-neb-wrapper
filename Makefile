@@ -4,7 +4,7 @@ MAKE:=make
 SHELL:=bash
 GOVERSION:=$(shell go version | awk '{print $$3}' | sed 's/^go\([0-9]\.[0-9]\).*/\1/')
 
-all: deps fmt build
+all: deps fmt build_naemon
 
 deps: versioncheck dump
 
@@ -19,8 +19,14 @@ dump:
 #	fi
 #	rm -f dump.go.bak
 
-build: dump
-	go build -buildmode=c-shared -ldflags "-s -w -X main.Build=$(shell git rev-parse --short HEAD)"
+build_naemon: dump
+	go build -tags naemon -buildmode=c-shared -ldflags "-s -w -X main.Build=$(shell git rev-parse --short HEAD)"
+
+build_nagios3: dump
+	go build -tags nagios3 -buildmode=c-shared -ldflags "-s -w -X main.Build=$(shell git rev-parse --short HEAD)"
+
+build_nagios4: dump
+	go build -tags nagios4 -buildmode=c-shared -ldflags "-s -w -X main.Build=$(shell git rev-parse --short HEAD)"
 
 debugbuild: deps fmt
 	go build -buildmode=c-shared -race -ldflags "-X main.Build=$(shell git rev-parse --short HEAD)"
@@ -78,7 +84,7 @@ clean:
 	rm -f coverage.html
 
 fmt:
-	# go get -u golang.org/x/tools/cmd/goimports
+	go get golang.org/x/tools/cmd/goimports
 	goimports -w .
 	go tool vet -all -shadow -assign -atomic -bool -composites -copylocks -nilfunc -rangeloops -unsafeptr -unreachable .
 	gofmt -w -s .
@@ -112,7 +118,7 @@ cyclo:
 	gocyclo -over 15 .
 
 mispell:
-	go get -u github.com/client9/misspell/cmd/misspell
+	go get github.com/client9/misspell/cmd/misspell
 	#
 	# Check if there are common spell errors.
 	# See https://github.com/client9/misspell
