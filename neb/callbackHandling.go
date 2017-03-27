@@ -1,10 +1,27 @@
 package neb
 
+/*
+
+#cgo nagios3 CFLAGS: -DNAGIOS3 -I. -I${SRCDIR}/../libs
+#cgo nagios3 LDFLAGS: -Wl,-unresolved-symbols=ignore-all
+
+#cgo nagios4 CFLAGS: -DNAGIOS4 -I. -I${SRCDIR}/../libs
+#cgo nagios4 LDFLAGS: -Wl,-unresolved-symbols=ignore-all
+
+#cgo naemon CFLAGS: -DNAEMON -I.
+#cgo naemon pkg-config: naemon
+
+#include "dependencies.h"
+
+*/
 import "C"
 import (
+	"fmt"
 	"sync"
 	"time"
 	"unsafe"
+
+	"github.com/ConSol/go-neb-wrapper/neb/nlog"
 )
 
 //Callback defines an function, which will be called by the core
@@ -16,11 +33,13 @@ var usedCallbackMapping = callbackMapping{}
 var callbackMutex = sync.Mutex{}
 
 //CallbackTimeout is the duration each callback has to return.
+//This can be changed at the beginning.
 var CallbackTimeout = time.Duration(10) * time.Millisecond
 
 //Generic_Callback this is a mapping function for C. Don't use it.
 //export Generic_Callback
 func Generic_Callback(callbackType int, data unsafe.Pointer) int {
+	startTime := time.Now()
 	returnCode := Ok
 	var callbacks []Callback
 	var contains bool
@@ -63,6 +82,15 @@ func Generic_Callback(callbackType int, data unsafe.Pointer) int {
 			return r
 		}
 	}
+
+	if Stats != nil {
+		select {
+		case Stats.OverallCallbackDuration <- map[int]time.Duration{callbackType: time.Now().Sub(startTime)}:
+		case <-time.After(CallbackTimeout):
+			nlog.CoreLog(fmt.Sprintf("[%s] Read your statstics data or don't set the global statistics object", Name))
+			return Ok
+		}
+	}
 	return returnCode
 }
 
@@ -70,6 +98,13 @@ func Generic_Callback(callbackType int, data unsafe.Pointer) int {
 func AddCallback(callbackType int, callback Callback) {
 	callbackMutex.Lock()
 	usedCallbackMapping[callbackType] = append(usedCallbackMapping[callbackType], callback)
+	if Stats != nil {
+		select {
+		case Stats.RegisteredCallbacksByType <- map[int]int{callbackType: len(usedCallbackMapping[callbackType])}:
+		case <-time.After(CallbackTimeout):
+			nlog.CoreLog(fmt.Sprintf("[%s] Read your statstics data or don't set the global statistics object", Name))
+		}
+	}
 	callbackMutex.Unlock()
 }
 
