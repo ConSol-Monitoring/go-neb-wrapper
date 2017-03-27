@@ -17,9 +17,9 @@ extern nebmodule *neb_handle;
 */
 import "C"
 import (
-	"fmt"
 	"unsafe"
 
+	"fmt"
 	"github.com/ConSol/go-neb-wrapper/neb/nlog"
 )
 
@@ -76,7 +76,7 @@ func Neb_Module_Init(flags int, args *C.char) C.int {
 	if NebModuleInitHook != nil {
 		returnCode = NebModuleInitHook(flags, C.GoString(args))
 	}
-	nlog.CoreLog(fmt.Sprintf("[%s] finished Init\n", Name))
+	nlog.CoreLog(fmt.Sprintf("[%s] finished Init with returncode: %s\n", Name, returnCode))
 	return C.int(returnCode)
 }
 
@@ -96,6 +96,6 @@ func Neb_Module_Deinit(flags, reason int) C.int {
 	if NebModuleInitHook != nil {
 		returnCode = NebModuleDeinitHook(flags, reason)
 	}
-	nlog.CoreLog(fmt.Sprintf("[%s] finished Deinit\n", Name))
+	nlog.CoreLog(fmt.Sprintf("[%s] finished Deinit with returncode: %s\n", Name, returnCode))
 	return C.int(returnCode)
 }

@@ -2,3 +2,4 @@ go-neb-wrapper
 go-neb-wrapper.h
 .idea/
 _obj
+*iml
