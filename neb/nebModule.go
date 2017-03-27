@@ -20,6 +20,7 @@ import (
 	"unsafe"
 
 	"fmt"
+
 	"github.com/ConSol/go-neb-wrapper/neb/nlog"
 )
 
