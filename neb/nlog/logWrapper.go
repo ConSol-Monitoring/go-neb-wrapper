@@ -47,7 +47,7 @@ func log(lvl int64, data string) {
 
 //CoreLog passes the given string to the core which logs in the configured file
 func CoreLog(msg string) {
-	log(NslogInfoMessage, msg)
+	log(InfoMessage, msg)
 }
 
 //CoreDump dumps the object as string to the core log
