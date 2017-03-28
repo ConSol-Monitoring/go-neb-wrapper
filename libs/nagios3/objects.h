@@ -408,7 +408,7 @@ struct service_struct{
 	char	*host_name;
 	char	*description;
 	char    *display_name;
-        char    *service_check_command;
+    char    *service_check_command;
 	char    *event_handler;
 	int     initial_state;
 	double	check_interval;

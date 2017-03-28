@@ -13,6 +13,17 @@ package structs
 
 #include "../dependencies.h"
 
+//This block is needed due to different naming schemes in Nagios3 and Nagios4/Naemon
+#if defined(NAGIOS3)
+char* ServiceGetCommand(void* data) {
+	return ((service *)data)->service_check_command;
+}
+#elif defined(NAGIOS4) || defined(NAEMON)
+char* ServiceGetCommand(void* data) {
+	return ((service *)data)->check_command;
+}
+#endif
+
 */
 import "C"
 import (
@@ -32,12 +43,13 @@ type Service struct {
 
 //CastServiceCheck tries to cast the pointer to an go struct
 func CastService(data unsafe.Pointer) Service {
-	st := *((*C.struct_service)(data))
+	st := *((*C.service)(data))
+	command := C.GoString(C.ServiceGetCommand(data))
 	return Service{
 		Description:  C.GoString(st.description),
 		HostName:     C.GoString(st.host_name),
-		CheckCommand: C.GoString(st.check_command),
-		Command:      splitCommand(C.GoString(st.check_command)),
+		CheckCommand: command,
+		Command:      splitCommand(command),
 		DisplayName:  C.GoString(st.display_name),
 	}
 }

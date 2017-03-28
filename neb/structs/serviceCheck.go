@@ -29,9 +29,6 @@ type ServiceCheck struct {
 	StateType      int
 	State          int
 	Timeout        int
-	CommandName    string
-	CommandArgs    string
-	CommandLine    string
 	StartTime      Timeval
 	EndTime        Timeval
 	EarlyTimeout   int
@@ -56,9 +53,6 @@ func CastServiceCheck(data unsafe.Pointer) ServiceCheck {
 		StateType:      int(st.state_type),
 		State:          int(st.state),
 		Timeout:        int(st.timeout),
-		CommandName:    C.GoString(st.command_name),
-		CommandArgs:    C.GoString(st.command_args),
-		CommandLine:    C.GoString(st.command_line),
 		StartTime:      CastTimevalStruct(st.start_time),
 		EndTime:        CastTimevalStruct(st.end_time),
 		EarlyTimeout:   int(st.early_timeout),
