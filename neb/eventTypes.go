@@ -13,9 +13,6 @@ package neb
 
 #include "dependencies.h"
 
-extern struct host *host_list;
-extern struct service *service_list;
-
 */
 import "C"
 
@@ -29,4 +26,7 @@ const (
 	HostcheckInitiate = C.NEBTYPE_HOSTCHECK_INITIATE
 	//HostcheckProcessed the processed/final result of a host check
 	HostcheckProcessed = C.NEBTYPE_HOSTCHECK_PROCESSED
+
+	NotificationStart = C.NEBTYPE_NOTIFICATION_START
+	NotificationEnd   = C.NEBTYPE_NOTIFICATION_END
 )

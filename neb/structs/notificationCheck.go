@@ -19,6 +19,49 @@ import (
 	"unsafe"
 )
 
+const (
+	//NotificationNormal notification reason
+	NotificationNormal = C.NOTIFICATION_NORMAL
+	//NotificationAcknowledgement notification reason
+	NotificationAcknowledgement = C.NOTIFICATION_ACKNOWLEDGEMENT
+	//NotificationFlappingstart notification reason
+	NotificationFlappingstart = C.NOTIFICATION_FLAPPINGSTART
+	//NotificationFlappingstop notification reason
+	NotificationFlappingstop = C.NOTIFICATION_FLAPPINGSTOP
+	//NotificationFlappingdisabled notification reason
+	NotificationFlappingdisabled = C.NOTIFICATION_FLAPPINGDISABLED
+	//NotificationDowntimestart notification reason
+	NotificationDowntimestart = C.NOTIFICATION_DOWNTIMESTART
+	//NotificationDowntimeend notification reason
+	NotificationDowntimeend = C.NOTIFICATION_DOWNTIMEEND
+	//NotificationDowntimecancelled notification reason
+	NotificationDowntimecancelled = C.NOTIFICATION_DOWNTIMECANCELLED
+	//NotificationCustom notification reason
+	NotificationCustom = C.NOTIFICATION_CUSTOM
+
+	//HostNotification notification type
+	HostNotification = C.HOST_NOTIFICATION
+	//ServiceNotification notification type
+	ServiceNotification = C.SERVICE_NOTIFICATION
+)
+
+var notificationReasonMapping = map[int]string{
+	NotificationNormal:            "NotificationNormal",
+	NotificationAcknowledgement:   "NotificationAcknowledgement",
+	NotificationFlappingstart:     "NotificationFlappingstart",
+	NotificationFlappingstop:      "NotificationFlappingstop",
+	NotificationFlappingdisabled:  "NotificationFlappingdisabled",
+	NotificationDowntimestart:     "NotificationDowntimestart",
+	NotificationDowntimeend:       "NotificationDowntimeend",
+	NotificationDowntimecancelled: "NotificationDowntimecancelled",
+	NotificationCustom:            "NotificationCustom",
+}
+
+var notificationTypeMapping = map[int]string{
+	HostNotification:    "HostNotification",
+	ServiceNotification: "ServiceNotification",
+}
+
 //NotificationCheck notification check structure
 type NotificationCheck struct {
 	Process
@@ -56,4 +99,17 @@ func CastNotificationCheck(data unsafe.Pointer) NotificationCheck {
 		ContactsNotified:   int(st.contacts_notified),
 		ObjectPtr:          st.object_ptr,
 	}
+}
+
+func CastNotificationReasonToString(typ int) string {
+	if str, ok := notificationReasonMapping[typ]; ok {
+		return str
+	}
+	return "Unkown Reason"
+}
+func CastNotificationTypeToString(typ int) string {
+	if str, ok := notificationTypeMapping[typ]; ok {
+		return str
+	}
+	return "Unkown Type"
 }
