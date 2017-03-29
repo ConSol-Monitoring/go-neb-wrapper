@@ -19,7 +19,7 @@ import (
 	"unsafe"
 )
 
-//ProcessStruct will be returned by process data
+//Process will be returned by process data
 type Process struct {
 	Type      int
 	Flags     int
