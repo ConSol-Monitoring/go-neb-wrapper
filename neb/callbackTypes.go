@@ -44,3 +44,39 @@ const (
 	ContactStatusData             = C.NEBCALLBACK_CONTACT_STATUS_DATA
 	AdaptiveContactData           = C.NEBCALLBACK_ADAPTIVE_CONTACT_DATA
 )
+
+var callbackTypeMapping = map[int]string{
+	ProcessData:                   "ProcessData",
+	TimedEventData:                "TimedEventData",
+	LogData:                       "LogData",
+	SystemCommandData:             "SystemCommandData",
+	EventHandlerData:              "EventHandlerData",
+	NotificationData:              "NotificationData",
+	ServiceCheckData:              "ServiceCheckData",
+	HostCheckData:                 "HostCheckData",
+	CommentData:                   "CommentData",
+	DowntimeData:                  "DowntimeData",
+	FlappingData:                  "FlappingData",
+	ProgramStatusData:             "ProgramStatusData",
+	HostStatusData:                "HostStatusData",
+	ServiceStatusData:             "ServiceStatusData",
+	AdaptiveProgramData:           "AdaptiveProgramData",
+	AdaptiveHostData:              "AdaptiveHostData",
+	AdaptiveServiceData:           "AdaptiveServiceData",
+	ExternalCommandData:           "ExternalCommandData",
+	AggregatedStatusData:          "AggregatedStatusData",
+	RetentionData:                 "RetentionData",
+	ContactNotificationData:       "ContactNotificationData",
+	ContactNotificationMethodData: "ContactNotificationMethodData",
+	AcknowledgementData:           "AcknowledgementData",
+	StateChangeData:               "StateChangeData",
+	ContactStatusData:             "ContactStatusData",
+	AdaptiveContactData:           "AdaptiveContactData",
+}
+
+func CallbackTypeToString(callbackType int) string {
+	if str, ok := callbackTypeMapping[callbackType]; ok {
+		return str
+	}
+	return "Unknown CallbackType"
+}
