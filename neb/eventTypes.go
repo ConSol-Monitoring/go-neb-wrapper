@@ -29,4 +29,7 @@ const (
 
 	NotificationStart = C.NEBTYPE_NOTIFICATION_START
 	NotificationEnd   = C.NEBTYPE_NOTIFICATION_END
+
+	ContactNotificationStart = C.NEBTYPE_CONTACTNOTIFICATION_START
+	ContactNotificationEnd   = C.NEBTYPE_CONTACTNOTIFICATION_END
 )
