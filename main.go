@@ -7,6 +7,7 @@ import (
 	"github.com/ConSol/go-neb-wrapper/neb"
 	"github.com/ConSol/go-neb-wrapper/neb/nlog"
 	"github.com/ConSol/go-neb-wrapper/neb/structs"
+	"time"
 )
 
 // Build contains the current git commit id
@@ -67,6 +68,11 @@ func init() {
 		fmt.Printf("Loading %s\n", neb.Title)
 		fmt.Printf("Init flags: %d\n", flags)
 		fmt.Printf("Init args: %s\n", args)
+		go func() {
+			time.Sleep(time.Duration(5) * time.Second)
+			fmt.Printf("Hosts : %d\n", neb.GetHosts())
+			fmt.Printf("Services : %d\n", neb.GetServices())
+		}()
 		return neb.Ok
 	}
 

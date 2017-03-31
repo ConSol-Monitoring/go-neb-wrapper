@@ -16,33 +16,47 @@ package neb
 extern struct host *host_list;
 extern struct service *service_list;
 
+int hosts;
+int services;
+
+void count_hosts_services()
+{
+    hosts = 0;
+    host *h = (host *)host_list;
+    while (h) {
+        hosts ++;
+        h = h->next;
+    }
+
+    services = 0;
+    service *s = (service *)service_list;
+    while (s) {
+        services ++;
+        s = s->next;
+    }
+}
+
 */
 import "C"
-import (
-	"github.com/ConSol/go-neb-wrapper/neb/nlog"
+
+var (
+	hosts    = -1
+	services = -1
 )
 
-//TODO: Nagios3 host_struct / Nagios4 host. Same with service
+//TODO: Currently just working with Naemon
 
-func GetHosts() {
-	currentHost := (*(*C.struct_host)(C.host_list))
-	for {
-		nlog.Dump(C.GoString(currentHost.name))
-		nextPtr := (*C.struct_host)(currentHost.next)
-		if nextPtr == nil {
-			break
-		}
-		currentHost = (*nextPtr)
+func GetHosts() int {
+	if hosts == -1 {
+		C.count_hosts_services()
+		hosts = int(C.hosts)
 	}
+	return hosts
 }
-func GetServices() {
-	currentService := (*(*C.struct_service)(C.service_list))
-	for {
-		nlog.Dump(C.GoString(currentService.display_name))
-		nextPtr := (*C.struct_service)(currentService.next)
-		if nextPtr == nil {
-			break
-		}
-		currentService = (*nextPtr)
+func GetServices() int {
+	if services == -1 {
+		C.count_hosts_services()
+		services = int(C.services)
 	}
+	return services
 }
