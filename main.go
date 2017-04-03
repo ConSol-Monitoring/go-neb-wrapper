@@ -5,7 +5,6 @@ import (
 	"unsafe"
 
 	"github.com/ConSol/go-neb-wrapper/neb"
-	"github.com/ConSol/go-neb-wrapper/neb/nlog"
 	"github.com/ConSol/go-neb-wrapper/neb/structs"
 )
 
@@ -15,16 +14,16 @@ var Build string
 
 //an example function how to handle multiple events at one function
 func genericCallback(callbackType int, data unsafe.Pointer) int {
-	nlog.CoreLog(fmt.Sprintf("[%s] Generic Callback for %d\n", neb.Name, callbackType))
+	neb.CoreFLog("Generic Callback for %d", callbackType)
 	switch callbackType {
 	case neb.ProcessData:
-		nlog.Dump(structs.CastProcess(data))
+		neb.Dump(structs.CastProcess(data))
 	case neb.HostStatusData:
-		nlog.Dump(structs.CastHostStatus(data))
+		neb.Dump(structs.CastHostStatus(data))
 	case neb.ServiceCheckData:
-		nlog.Dump(structs.CastServiceCheck(data))
+		neb.Dump(structs.CastServiceCheck(data))
 	case neb.HostCheckData:
-		nlog.Dump(structs.CastHostCheck(data))
+		neb.Dump(structs.CastHostCheck(data))
 	}
 	return neb.Ok
 
@@ -43,11 +42,11 @@ func init() {
 
 	// this functions will be called every time a ProcessData event is triggered
 	exampleCallback1 := func(callbackType int, data unsafe.Pointer) int {
-		nlog.CoreLog(fmt.Sprintf("[%s] Example Callback1 logged for %d\n", neb.Name, callbackType))
+		neb.CoreFLog("Example Callback1 logged for %d", callbackType)
 		return neb.Ok
 	}
 	exampleCallback2 := func(callbackType int, data unsafe.Pointer) int {
-		nlog.CoreLog(fmt.Sprintf("[%s] Example Callback2 logged for %d\n", neb.Name, callbackType))
+		neb.CoreFLog("Example Callback2 logged for %d", callbackType)
 		return neb.Ok
 	}
 	//There can be multiple of them
@@ -62,18 +61,19 @@ func init() {
 
 	//Init Hook Example
 	neb.NebModuleInitHook = func(flags int, args string) int {
-		nlog.CoreLog(fmt.Sprintf("[%s] Loading %s\n", neb.Name, neb.Title))
-		nlog.CoreLog(fmt.Sprintf("[%s] Init flags: %d\n", neb.Name, flags))
-		nlog.CoreLog(fmt.Sprintf("[%s] Init args: %s\n", neb.Name, args))
-		nlog.CoreLog(fmt.Sprintf("[%s] CoreType %s", neb.Name, neb.CoreToString()))
+		neb.CoreFLog("Loading %s", neb.Title)
+		neb.CoreFLog("Init flags: %d", flags)
+		neb.CoreFLog("Init args: %s", args)
+		neb.CoreFLog("CoreType %s", neb.CoreToString())
 		return neb.Ok
 	}
 
 	//Deinit Hook Example
 	neb.NebModuleDeinitHook = func(flags, reason int) int {
-		nlog.CoreLog(fmt.Sprintf("[%s] Unloading %s\n", neb.Name, neb.Title))
-		nlog.CoreLog(fmt.Sprintf("[%s] Deinit flags: %d\n", neb.Name, flags))
-		nlog.CoreLog(fmt.Sprintf("[%s] Deinit reason: %d\n", neb.Name, reason))
+		neb.CoreFLog("Unloading %s", neb.Title)
+		neb.CoreFLog("Deinit flags: %d", flags)
+		neb.CoreFLog("Deinit reason: %d", reason)
+		neb.CoreFLog("FOO: %d BAR: %d", 1, 0)
 		return neb.Ok
 	}
 

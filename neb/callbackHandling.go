@@ -16,12 +16,9 @@ package neb
 */
 import "C"
 import (
-	"fmt"
 	"sync"
 	"time"
 	"unsafe"
-
-	"github.com/ConSol/go-neb-wrapper/neb/nlog"
 )
 
 //Callback defines an function, which will be called by the core
@@ -51,7 +48,7 @@ func Generic_Callback(callbackType int, data unsafe.Pointer) int {
 	callbackMutex.Unlock()
 	callbackAmount := len(callbacks)
 	if !contains || callbackAmount == 0 {
-		nlog.CoreLog(fmt.Sprintf("[%s] We did not register for the callback %d", Name, callbackType))
+		CoreFLog("We did not register for the callback %d", callbackType)
 		return Error
 	}
 
@@ -61,7 +58,7 @@ func Generic_Callback(callbackType int, data unsafe.Pointer) int {
 	case CoreNaemon:
 		returnCode = concurrentCallbackHandling(callbackType, data, callbacks)
 	default:
-		nlog.CoreLog(fmt.Sprintf("[%s] The coretype is not supported: %d", Name, GetCoreType()))
+		CoreFLog("The coretype is not supported: %d", GetCoreType())
 		returnCode = Error
 	}
 
@@ -69,7 +66,7 @@ func Generic_Callback(callbackType int, data unsafe.Pointer) int {
 		select {
 		case Stats.OverallCallbackDuration <- map[int]time.Duration{callbackType: time.Now().Sub(startTime)}:
 		case <-time.After(CallbackTimeout):
-			nlog.CoreLog(fmt.Sprintf("[%s] Read your statstics data or don't set the global statistics object", Name))
+			CoreFLog("Read your statstics data or don't set the global statistics object")
 			return Ok
 		}
 	}
@@ -135,7 +132,7 @@ func AddCallback(callbackType int, callback Callback) {
 		select {
 		case Stats.RegisteredCallbacksByType <- map[int]int{callbackType: len(usedCallbackMapping[callbackType])}:
 		case <-time.After(CallbackTimeout):
-			nlog.CoreLog(fmt.Sprintf("[%s] Read your statstics data or don't set the global statistics object", Name))
+			CoreFLog("Read your statstics data or don't set the global statistics object")
 		}
 	}
 	callbackMutex.Unlock()
