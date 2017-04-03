@@ -26,18 +26,27 @@ const (
 
 var coreType = C.CORE_TYPE
 
+//GetCoreType returns the C const CORE_TYPE which defines on which core the code is compiled
+func GetCoreType() int {
+	return int(coreType)
+}
+
+//IsCoreNagios3 the code was compiled for nagios3
 func IsCoreNagios3() bool {
 	return coreType == CoreNagios3
 }
 
+//IsCoreNagios4 the code was compiled for nagios4
 func IsCoreNagios4() bool {
 	return coreType == CoreNagios4
 }
 
+//IsCoreNaemon the code was compiled for naemon
 func IsCoreNaemon() bool {
 	return coreType == CoreNaemon
 }
 
+//CoreToString will return the core name for which the code is compile for
 func CoreToString() string {
 	switch coreType {
 	case CoreNagios3:
