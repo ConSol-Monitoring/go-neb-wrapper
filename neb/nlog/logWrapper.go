@@ -19,10 +19,10 @@ package nlog
 
 #if defined(NAGIOS3)
 #include "../../libs/nagios3/nebcallbacks.h"
-void Log(int lvl, char* data) { }
+void Log(int lvl, char* data) { write_to_all_logs(data, lvl); }
 #elif defined(NAGIOS4)
 #include "../../libs/nagios4/nebcallbacks.h"
-void Log(int lvl, char* data) { }
+void Log(int lvl, char* data) { write_to_all_logs(data, lvl); }
 #elif defined(NAEMON)
 #include "naemon/naemon.h"
 void Log(int lvl, char* data) { nm_log(lvl, data); }
