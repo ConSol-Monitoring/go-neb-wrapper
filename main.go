@@ -7,7 +7,6 @@ import (
 	"github.com/ConSol/go-neb-wrapper/neb"
 	"github.com/ConSol/go-neb-wrapper/neb/nlog"
 	"github.com/ConSol/go-neb-wrapper/neb/structs"
-	"time"
 )
 
 // Build contains the current git commit id
@@ -26,14 +25,13 @@ func genericCallback(callbackType int, data unsafe.Pointer) int {
 		nlog.Dump(structs.CastServiceCheck(data))
 	case neb.HostCheckData:
 		nlog.Dump(structs.CastHostCheck(data))
-	default:
-		fmt.Println(fmt.Sprintf("[%s] Unkown CallbackType: %d\n", neb.Name, callbackType))
 	}
 	return neb.Ok
 
 }
 
 //This is an example main file, which should demonstrate how to use the library.
+//Don't start go routines if you are using nagios3
 func init() {
 	// just some information about your plugin
 	neb.Title = "GO GO Neb Wrapper! *\\o/*"
@@ -45,7 +43,6 @@ func init() {
 
 	// this functions will be called every time a ProcessData event is triggered
 	exampleCallback1 := func(callbackType int, data unsafe.Pointer) int {
-		fmt.Printf("Example Callback1 for %d\n", callbackType)
 		nlog.CoreLog(fmt.Sprintf("[%s] Example Callback1 logged for %d\n", neb.Name, callbackType))
 		return neb.Ok
 	}
@@ -65,22 +62,18 @@ func init() {
 
 	//Init Hook Example
 	neb.NebModuleInitHook = func(flags int, args string) int {
-		fmt.Printf("Loading %s\n", neb.Title)
-		fmt.Printf("Init flags: %d\n", flags)
-		fmt.Printf("Init args: %s\n", args)
-		go func() {
-			time.Sleep(time.Duration(5) * time.Second)
-			fmt.Printf("Hosts : %d\n", neb.GetHosts())
-			fmt.Printf("Services : %d\n", neb.GetServices())
-		}()
+		nlog.CoreLog(fmt.Sprintf("[%s] Loading %s\n", neb.Name, neb.Title))
+		nlog.CoreLog(fmt.Sprintf("[%s] Init flags: %d\n", neb.Name, flags))
+		nlog.CoreLog(fmt.Sprintf("[%s] Init args: %s\n", neb.Name, args))
+		nlog.CoreLog(fmt.Sprintf("[%s] CoreType %s", neb.Name, neb.CoreToString()))
 		return neb.Ok
 	}
 
 	//Deinit Hook Example
 	neb.NebModuleDeinitHook = func(flags, reason int) int {
-		fmt.Printf("Unloading %s\n", neb.Title)
-		fmt.Printf("Deinit flags: %d\n", flags)
-		fmt.Printf("Deinit reason: %d\n", reason)
+		nlog.CoreLog(fmt.Sprintf("[%s] Unloading %s\n", neb.Name, neb.Title))
+		nlog.CoreLog(fmt.Sprintf("[%s] Deinit flags: %d\n", neb.Name, flags))
+		nlog.CoreLog(fmt.Sprintf("[%s] Deinit reason: %d\n", neb.Name, reason))
 		return neb.Ok
 	}
 
