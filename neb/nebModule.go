@@ -52,8 +52,8 @@ var NebModuleInitHook func(flags int, args string) int
 //return Ok if everything went well
 var NebModuleDeinitHook func(flags, reason int) int
 
-//export Neb_Module_Init
-func Neb_Module_Init(flags int, args *C.char) C.int {
+//export GoNebModuleInit
+func GoNebModuleInit(flags int, args *C.char) C.int {
 	handle := unsafe.Pointer(C.neb_handle)
 	defer C.free(unsafe.Pointer(args))
 	modinfoMapping := map[C.int]string{
@@ -87,8 +87,9 @@ func setModuleInfo(handle unsafe.Pointer, infoType C.int, value string) {
 	C.free(unsafe.Pointer(cValue))
 }
 
-//export Neb_Module_Deinit
-func Neb_Module_Deinit(flags, reason int) C.int {
+//export GoNebModuleDeinit
+func GoNebModuleDeinit(flags, reason int) C.int {
+	nlog.CoreLog("STOPPP")
 	//unload callbacks
 	deinitCallbacks()
 	//default returncode

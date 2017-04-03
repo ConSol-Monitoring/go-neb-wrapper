@@ -1,3 +1,9 @@
+#define CORE_NAGIOS3    1
+#define CORE_NAGIOS4    2
+#define CORE_NAEMON     3
+
+int CORE_TYPE;
+
 #if defined(NAGIOS3)
 #include "nagios3/nagios.h"
 #include "nagios3/neberrors.h"
