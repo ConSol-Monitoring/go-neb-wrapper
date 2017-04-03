@@ -36,7 +36,7 @@ var callbackMutex = sync.Mutex{}
 //This can be changed at the beginning.
 var CallbackTimeout = time.Duration(10) * time.Millisecond
 
-//Generic_Callback this is a mapping function for C. Don't use it.
+//Generic_Callback this is a mapping function for C, do not use it on your own.
 //export Generic_Callback
 func Generic_Callback(callbackType int, data unsafe.Pointer) int {
 	startTime := time.Now()
@@ -119,7 +119,7 @@ func initCallbacks() {
 func deinitCallbacks() {
 	callbackMutex.Lock()
 	for callbackType := range usedCallbackMapping {
-		RegisterGenericCallback(int64(callbackType))
+		DeregisterGenericCallback(int64(callbackType))
 	}
 	callbackMutex.Unlock()
 }
