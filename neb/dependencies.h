@@ -2,7 +2,11 @@
 #define CORE_NAGIOS4    2
 #define CORE_NAEMON     3
 
+//is used to save the build flags
 int CORE_TYPE;
+
+//is used to be able to access all host and service infos
+#define NSCORE
 
 #if defined(NAGIOS3)
 #include "nagios3/nagios.h"
