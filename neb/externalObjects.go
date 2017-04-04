@@ -16,47 +16,31 @@ package neb
 extern struct host *host_list;
 extern struct service *service_list;
 
-int hosts;
-int services;
-
-void count_hosts_services()
-{
-    hosts = 0;
-    host *h = (host *)host_list;
-    while (h) {
-        hosts ++;
-        h = h->next;
-    }
-
-    services = 0;
-    service *s = (service *)service_list;
-    while (s) {
-        services ++;
-        s = s->next;
-    }
-}
-
 */
 import "C"
-
-var (
-	hosts    = -1
-	services = -1
+import (
+	"github.com/ConSol/go-neb-wrapper/neb/structs"
+	"unsafe"
 )
 
-//TODO: Currently just working with Naemon
-
-func GetHosts() int {
-	if hosts == -1 {
-		C.count_hosts_services()
-		hosts = int(C.hosts)
+func GetHosts() structs.Hostlist {
+	hostList := structs.Hostlist{}
+	hostPointer := unsafe.Pointer(C.host_list)
+	for hostPointer != nil {
+		hostList = append(hostList, structs.CastHost(hostPointer))
+		host := *((*C.host)(hostPointer))
+		hostPointer = unsafe.Pointer(host.next)
 	}
-	return hosts
+	return hostList
 }
-func GetServices() int {
-	if services == -1 {
-		C.count_hosts_services()
-		services = int(C.services)
+
+func GetServices() structs.Servicelist {
+	serviceList := structs.Servicelist{}
+	servicePointer := unsafe.Pointer(C.service_list)
+	for servicePointer != nil {
+		serviceList = append(serviceList, structs.CastService(servicePointer))
+		service := *((*C.service)(servicePointer))
+		servicePointer = unsafe.Pointer(service.next)
 	}
-	return services
+	return serviceList
 }

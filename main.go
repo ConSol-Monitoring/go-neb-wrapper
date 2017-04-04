@@ -30,7 +30,6 @@ func genericCallback(callbackType int, data unsafe.Pointer) int {
 }
 
 //This is an example main file, which should demonstrate how to use the library.
-//Don't start go routines if you are using nagios3
 func init() {
 	// just some information about your plugin
 	neb.Title = "GO GO Neb Wrapper! *\\o/*"
@@ -73,7 +72,6 @@ func init() {
 		neb.CoreFLog("Unloading %s", neb.Title)
 		neb.CoreFLog("Deinit flags: %d", flags)
 		neb.CoreFLog("Deinit reason: %d", reason)
-		neb.CoreFLog("FOO: %d BAR: %d", 1, 0)
 		return neb.Ok
 	}
 
