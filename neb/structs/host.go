@@ -30,20 +30,27 @@ import (
 	"unsafe"
 )
 
-//Hostlist is a list of hosts
-type Hostlist []Host
+//HostList is a list of hosts
+type HostList []Host
 
+//GenMetaHostAndServiceList will create a MetaHostAndServiceList
+func (host HostList) GenMetaHostAndServiceList() MetaHostAndServiceList {
+	meta := MetaHostAndServiceList{}
+	for _, h := range host {
+		meta = append(meta, h.MetaHostAndService)
+	}
+	return meta
+}
+
+//Host represents a nagios host
 type Host struct {
-	Name        string
-	Alias       string
-	DisplayName string
+	MetaHostAndService
+	Name  string
+	Alias string
 	//CheckCommand contains args
 	CheckCommand string
 	//Command is the pure pluginname
-	Command       string
-	ChecksEnabled int
-	CheckType     int
-	IsFlapping    int
+	Command string
 }
 
 //CastHost tries to cast the pointer to an go struct
@@ -51,13 +58,10 @@ func CastHost(data unsafe.Pointer) Host {
 	st := *((*C.host)(data))
 	command := C.GoString(C.HostGetCommand(data))
 	return Host{
-		Name:          C.GoString(st.name),
-		Alias:         C.GoString(st.alias),
-		DisplayName:   C.GoString(st.display_name),
-		CheckCommand:  command,
-		Command:       splitCommand(command),
-		ChecksEnabled: int(st.checks_enabled),
-		CheckType:     int(st.check_type),
-		IsFlapping:    int(st.is_flapping),
+		MetaHostAndService: CastMetaHostAndService(data, MetaService),
+		Name:               C.GoString(st.name),
+		Alias:              C.GoString(st.alias),
+		CheckCommand:       command,
+		Command:            splitCommand(command),
 	}
 }

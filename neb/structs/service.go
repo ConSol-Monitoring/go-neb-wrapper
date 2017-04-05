@@ -27,24 +27,30 @@ char* ServiceGetCommand(void* data) {
 */
 import "C"
 import (
-	"strings"
 	"unsafe"
 )
 
-//Servicelist is a list of services
-type Servicelist []Service
+//ServiceList is a list of services
+type ServiceList []Service
 
+//GenMetaHostAndServiceList will create a MetaHostAndServiceList
+func (service ServiceList) GenMetaHostAndServiceList() MetaHostAndServiceList {
+	meta := MetaHostAndServiceList{}
+	for _, s := range service {
+		meta = append(meta, s.MetaHostAndService)
+	}
+	return meta
+}
+
+//Service represents a nagios service
 type Service struct {
+	MetaHostAndService
 	HostName    string
 	Description string
-	DisplayName string
 	//CheckCommand contains args
 	CheckCommand string
 	//Command is the pure pluginname
-	Command       string
-	ChecksEnabled int
-	CheckType     int
-	IsFlapping    int
+	Command string
 }
 
 //CastService tries to cast the pointer to an go struct
@@ -52,21 +58,10 @@ func CastService(data unsafe.Pointer) Service {
 	st := *((*C.service)(data))
 	command := C.GoString(C.ServiceGetCommand(data))
 	return Service{
-		HostName:      C.GoString(st.host_name),
-		Description:   C.GoString(st.description),
-		DisplayName:   C.GoString(st.display_name),
-		CheckCommand:  command,
-		Command:       splitCommand(command),
-		ChecksEnabled: int(st.checks_enabled),
-		CheckType:     int(st.check_type),
-		IsFlapping:    int(st.is_flapping),
-	}
-}
-
-func splitCommand(checkCommand string) string {
-	if strings.Contains(checkCommand, "!") {
-		return strings.Split(checkCommand, "!")[0]
-	} else {
-		return checkCommand
+		MetaHostAndService: CastMetaHostAndService(data, MetaService),
+		HostName:           C.GoString(st.host_name),
+		Description:        C.GoString(st.description),
+		CheckCommand:       command,
+		Command:            splitCommand(command),
 	}
 }

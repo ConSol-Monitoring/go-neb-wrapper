@@ -23,8 +23,8 @@ import (
 	"unsafe"
 )
 
-func GetHosts() structs.Hostlist {
-	hostList := structs.Hostlist{}
+func GetHosts() structs.HostList {
+	hostList := structs.HostList{}
 	hostPointer := unsafe.Pointer(C.host_list)
 	for hostPointer != nil {
 		hostList = append(hostList, structs.CastHost(hostPointer))
@@ -34,8 +34,8 @@ func GetHosts() structs.Hostlist {
 	return hostList
 }
 
-func GetServices() structs.Servicelist {
-	serviceList := structs.Servicelist{}
+func GetServices() structs.ServiceList {
+	serviceList := structs.ServiceList{}
 	servicePointer := unsafe.Pointer(C.service_list)
 	for servicePointer != nil {
 		serviceList = append(serviceList, structs.CastService(servicePointer))
