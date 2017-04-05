@@ -15,7 +15,10 @@ package checkTypes
 
 */
 import "C"
-import "github.com/ConSol/go-neb-wrapper/neb"
+import (
+	"fmt"
+	"github.com/ConSol/go-neb-wrapper/neb"
+)
 
 var (
 	//Active for passive checks
@@ -61,5 +64,5 @@ func CheckTypeToString(checkType int) string {
 	if str, ok := checkTypeMapping[checkType]; ok {
 		return str
 	}
-	return "Unknown CheckType"
+	return fmt.Sprintf("Unknown CheckType: %d", checkType)
 }

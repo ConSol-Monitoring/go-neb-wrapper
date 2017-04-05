@@ -26,10 +26,13 @@ type MetaHostAndServiceList []MetaHostAndService
 
 //MetaHostAndService contains data for host and service
 type MetaHostAndService struct {
-	DisplayName   string
-	ChecksEnabled int
-	CheckType     int
-	IsFlapping    int
+	DisplayName              string
+	ChecksEnabled            int
+	CheckType                int
+	IsFlapping               int
+	CurrentState             int //0: up, 1: down, 2: unreachable. See stateTypes
+	ScheduledDowntimeDepth   int
+	PendingFlexDowntimeDepth int
 }
 
 //MetaType is needed to differentiate the void pointer in the constructor
@@ -46,18 +49,24 @@ func CastMetaHostAndService(data unsafe.Pointer, typ MetaType) MetaHostAndServic
 	case MetaHost:
 		st := *((*C.host)(data))
 		return MetaHostAndService{
-			DisplayName:   C.GoString(st.display_name),
-			ChecksEnabled: int(st.checks_enabled),
-			CheckType:     int(st.check_type),
-			IsFlapping:    int(st.is_flapping),
+			DisplayName:              C.GoString(st.display_name),
+			ChecksEnabled:            int(st.checks_enabled),
+			CheckType:                int(st.check_type),
+			IsFlapping:               int(st.is_flapping),
+			CurrentState:             int(st.current_state),
+			ScheduledDowntimeDepth:   int(st.scheduled_downtime_depth),
+			PendingFlexDowntimeDepth: int(st.pending_flex_downtime),
 		}
 	case MetaService:
 		st := *((*C.service)(data))
 		return MetaHostAndService{
-			DisplayName:   C.GoString(st.display_name),
-			ChecksEnabled: int(st.checks_enabled),
-			CheckType:     int(st.check_type),
-			IsFlapping:    int(st.is_flapping),
+			DisplayName:              C.GoString(st.display_name),
+			ChecksEnabled:            int(st.checks_enabled),
+			CheckType:                int(st.check_type),
+			IsFlapping:               int(st.is_flapping),
+			CurrentState:             int(st.current_state),
+			ScheduledDowntimeDepth:   int(st.scheduled_downtime_depth),
+			PendingFlexDowntimeDepth: int(st.pending_flex_downtime),
 		}
 	default:
 		panic(fmt.Sprintf("The given type is not allowed: %d", typ))
