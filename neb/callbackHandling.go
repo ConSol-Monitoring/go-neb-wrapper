@@ -16,6 +16,7 @@ package neb
 */
 import "C"
 import (
+	"fmt"
 	"sync"
 	"time"
 	"unsafe"
@@ -85,6 +86,12 @@ func concurrentCallbackHandling(callbackType int, data unsafe.Pointer, callbacks
 	//start all handlers for this callback
 	for i, c := range callbacks {
 		go func(result chan int, call Callback) {
+			defer func() {
+				if rec := recover(); rec != nil {
+					CoreFLog("Cought panic: %s", fmt.Sprint(rec))
+					result <- Error
+				}
+			}()
 			result <- call(callbackType, data)
 		}(resultChannels[i], c)
 	}
@@ -106,6 +113,11 @@ func concurrentCallbackHandling(callbackType int, data unsafe.Pointer, callbacks
 
 //serialCallbackHandling will call the callbacks one by one.
 func serialCallbackHandling(callbackType int, data unsafe.Pointer, callbacks []Callback) int {
+	defer func() {
+		if rec := recover(); rec != nil {
+			CoreFLog("Cought panic: %s", fmt.Sprint(rec))
+		}
+	}()
 	callbackAmount := len(callbacks)
 	resultList := make([]int, callbackAmount)
 	for i, c := range callbacks {
