@@ -44,11 +44,11 @@ func init() {
 		File = -1
 		Other = -1
 	case neb.CoreNaemon, neb.CoreNagios4:
-		Active = C.CHECK_TYPE_ACTIVE
-		Passive = C.CHECK_TYPE_PASSIVE
-		Parent = C.CHECK_TYPE_PARENT
-		File = C.CHECK_TYPE_FILE
-		Other = C.CHECK_TYPE_OTHER
+		Active = 0
+		Passive = 1
+		Parent = 2
+		File = 3
+		Other = 4
 	}
 
 	checkTypeMapping = map[int]string{
