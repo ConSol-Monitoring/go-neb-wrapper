@@ -69,7 +69,7 @@ func CoreDump(v interface{}) {
 	spew.Config.Indent = "\t"
 	spew.Config.MaxDepth = 20
 	spew.Config.DisableMethods = true
-	CoreLog(spew.Sdump(v))
+	CoreFLog(spew.Sdump(v))
 }
 
 //Dump can be uses to dump any data to stderr

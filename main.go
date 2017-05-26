@@ -14,16 +14,16 @@ var Build string
 
 //an example function how to handle multiple events at one function
 func genericCallback(callbackType int, data unsafe.Pointer) int {
-	neb.CoreFLog("Generic Callback for %d", callbackType)
+	neb.CoreFLog("Generic Callback for %s (%d)", neb.CallbackTypeToString(callbackType), callbackType)
 	switch callbackType {
 	case neb.ProcessData:
-		neb.Dump(structs.CastProcess(data))
+		neb.CoreDump(structs.CastProcess(data))
 	case neb.HostStatusData:
-		neb.Dump(structs.CastHostStatus(data))
+		neb.CoreDump(structs.CastHostStatus(data))
 	case neb.ServiceCheckData:
-		neb.Dump(structs.CastServiceCheck(data))
+		neb.CoreDump(structs.CastServiceCheck(data))
 	case neb.HostCheckData:
-		neb.Dump(structs.CastHostCheck(data))
+		neb.CoreDump(structs.CastHostCheck(data))
 	}
 	return neb.Ok
 
