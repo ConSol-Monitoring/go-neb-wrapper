@@ -1,7 +1,6 @@
 go-naemon-broker-module
 =======================
 
-[comment]: # ( [![Build Status](https://travis-ci.org/ConSol/go-neb-wrapper.svg?branch=master)](https://travis-ci.org/ConSol/go-neb-wrapper) )
 [![Go Report Card](https://goreportcard.com/badge/github.com/ConSol/go-neb-wrapper)](https://goreportcard.com/report/github.com/ConSol/go-neb-wrapper)
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0)
 
@@ -24,7 +23,7 @@ Nagios 3 and Icinga 1 are only working **without** the daemon mode!
 # Minimalistic-Example
 [main.go](https://github.com/ConSol/go-neb-wrapper/blob/master/main.go)
 
-# Module written with this API
+# Modules written with this API
 
 - [Iapetos](https://github.com/Griesbacher/Iapetos)
 
