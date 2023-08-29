@@ -21,7 +21,7 @@ jobs:
         go-version: ${{ matrix.go-version }}
     - uses: actions/checkout@v3
     - run: |
-        sudo sh -c 'echo "deb [signed-by=/etc/apt/trusted.gpg.d/naemon.asc] http://download.opensuse.org/repositories/home:/naemon/xUbuntu_$(lsb_release -rs)/ ./"' >> /etc/apt/sources.list.d/naemon-stable.list
+        sudo sh -c 'echo "deb [signed-by=/etc/apt/trusted.gpg.d/naemon.asc] http://download.opensuse.org/repositories/home:/naemon/xUbuntu_$(lsb_release -rs)/ ./" >> /etc/apt/sources.list.d/naemon-stable.list'
         sudo curl -s -o /etc/apt/trusted.gpg.d/naemon.asc "https://build.opensuse.org/projects/home:naemon/signing_keys/download?kind=gpg"
         sudo apt-get update
         sudo apt-get -y install naemon-dev
