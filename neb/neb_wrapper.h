@@ -25,4 +25,3 @@ int nebmodule_deinit( int flags, int reason ) {
 int generic_callback(int type,  void* data) {
    return(Generic_Callback(type, data));
 }
-

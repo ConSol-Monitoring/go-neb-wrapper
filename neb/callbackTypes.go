@@ -37,6 +37,7 @@ const (
 	StateChangeData               = C.NEBCALLBACK_STATE_CHANGE_DATA
 	ContactStatusData             = C.NEBCALLBACK_CONTACT_STATUS_DATA
 	AdaptiveContactData           = C.NEBCALLBACK_ADAPTIVE_CONTACT_DATA
+	VaultMacroData                = C.NEBCALLBACK_VAULT_MACRO_DATA
 )
 
 var callbackTypeMapping = map[int]string{
