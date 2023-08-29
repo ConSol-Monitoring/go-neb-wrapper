@@ -12,11 +12,6 @@ This is an NEB module API for [Naemon](http://www.naemon.io) written in Golang. 
 
 It is using CGo therefor this is not plain Go, there you have to be careful, if you want to write a module.
 
-# Limitations
-
-This API works with:
-- Naemon
-
 # Minimalistic-Example
 [main.go](https://github.com/ConSol-Monitoring/go-neb-wrapper/blob/master/main.go)
 
@@ -31,5 +26,7 @@ If you have written a module yourself, let us know.
 
 The module has to be compiled as shared library so Naemon can load it.
 
+You will have to install the `naemon-dev` package in order to find all required c header files.
+
 Naemon:
-- go build -buildmode=c-shared -ldflags "-s -w"
+- go build -buildmode=c-shared -ldflags "-s -w" -o go-neb-wrapper-example.so

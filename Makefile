@@ -44,7 +44,7 @@ vendor:
 	go mod vendor
 
 build: vendor
-	go build -buildmode=c-shared -ldflags "-s -w -X main.Build=$(BUILD)"
+	go build -buildmode=c-shared -ldflags "-s -w -X main.Build=$(BUILD)" -o go-neb-wrapper-example.so
 
 test: fmt vendor
 	go test -v
