@@ -2,24 +2,19 @@ package structs
 
 /*
 
-#cgo nagios3 CFLAGS: -DNAGIOS3 -I. -I${SRCDIR}/../../libs
-#cgo nagios3 LDFLAGS: -Wl,-unresolved-symbols=ignore-all
-
-#cgo nagios4 CFLAGS: -DNAGIOS4 -I. -I${SRCDIR}/../../libs
-#cgo nagios4 LDFLAGS: -Wl,-unresolved-symbols=ignore-all
-
-#cgo naemon CFLAGS: -DNAEMON -I.
-#cgo naemon pkg-config: naemon
+#cgo CFLAGS: -DNAEMON -I.
+#cgo pkg-config: naemon
 
 #include "../dependencies.h"
 
 */
 import "C"
+
 import (
 	"unsafe"
 )
 
-//ContactNotificationCheck notification check structure
+// ContactNotificationCheck notification check structure
 type ContactNotificationCheck struct {
 	Process
 	NotificationType   int
@@ -37,7 +32,7 @@ type ContactNotificationCheck struct {
 	ContactName        string
 }
 
-//CastContactNotificationCheck tries to cast the pointer to an go struct
+// CastContactNotificationCheck tries to cast the pointer to an go struct
 func CastContactNotificationCheck(data unsafe.Pointer) ContactNotificationCheck {
 	st := *((*C.struct_nebstruct_contact_notification_struct)(data))
 	return ContactNotificationCheck{

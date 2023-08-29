@@ -4,15 +4,15 @@ import (
 	"fmt"
 	"unsafe"
 
-	"github.com/ConSol/go-neb-wrapper/neb"
-	"github.com/ConSol/go-neb-wrapper/neb/structs"
+	"github.com/ConSol-Monitoring/go-neb-wrapper/neb"
+	"github.com/ConSol-Monitoring/go-neb-wrapper/neb/structs"
 )
 
 // Build contains the current git commit id
 // compile passing -ldflags "-X main.Build <build sha1>" to set the id.
 var Build string
 
-//an example function how to handle multiple events at one function
+// an example function how to handle multiple events at one function
 func genericCallback(callbackType int, data unsafe.Pointer) int {
 	neb.CoreFLog("Generic Callback for %s (%d)", neb.CallbackTypeToString(callbackType), callbackType)
 	switch callbackType {
@@ -26,10 +26,9 @@ func genericCallback(callbackType int, data unsafe.Pointer) int {
 		neb.CoreDump(structs.CastHostCheck(data))
 	}
 	return neb.Ok
-
 }
 
-//This is an example main file, which should demonstrate how to use the library.
+// This is an example main file, which should demonstrate how to use the library.
 func init() {
 	// just some information about your plugin
 	neb.Title = "GO GO Neb Wrapper! *\\o/*"
@@ -48,34 +47,31 @@ func init() {
 		neb.CoreFLog("Example Callback2 logged for %d", callbackType)
 		return neb.Ok
 	}
-	//There can be multiple of them
+	// There can be multiple of them
 	neb.AddCallback(neb.ProcessData, exampleCallback1)
 	neb.AddCallback(neb.ProcessData, exampleCallback2)
 
-	//And a lot more
+	// And a lot more
 	for _, t := range []int{neb.ProcessData, neb.HostStatusData, neb.ServiceCheckData, neb.HostCheckData} {
 		neb.AddCallback(t, genericCallback)
-
 	}
 
-	//Init Hook Example
+	// Init Hook Example
 	neb.NebModuleInitHook = func(flags int, args string) int {
 		neb.CoreFLog("Loading %s", neb.Title)
 		neb.CoreFLog("Init flags: %d", flags)
 		neb.CoreFLog("Init args: %s", args)
-		neb.CoreFLog("CoreType %s", neb.CoreToString())
 		return neb.Ok
 	}
 
-	//Deinit Hook Example
+	// Deinit Hook Example
 	neb.NebModuleDeinitHook = func(flags, reason int) int {
 		neb.CoreFLog("Unloading %s", neb.Title)
 		neb.CoreFLog("Deinit flags: %d", flags)
 		neb.CoreFLog("Deinit reason: %d", reason)
 		return neb.Ok
 	}
-
 }
 
-//DON'T USE MAIN, IT WILL NEVER BE CALLED! USE CALLBACKS.
+// DON'T USE MAIN, IT WILL NEVER BE CALLED! USE CALLBACKS.
 func main() {}

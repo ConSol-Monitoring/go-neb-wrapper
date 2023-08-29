@@ -2,24 +2,19 @@ package structs
 
 /*
 
-#cgo nagios3 CFLAGS: -DNAGIOS3 -I. -I${SRCDIR}/../../libs
-#cgo nagios3 LDFLAGS: -Wl,-unresolved-symbols=ignore-all
-
-#cgo nagios4 CFLAGS: -DNAGIOS4 -I. -I${SRCDIR}/../../libs
-#cgo nagios4 LDFLAGS: -Wl,-unresolved-symbols=ignore-all
-
-#cgo naemon CFLAGS: -DNAEMON -I.
-#cgo naemon pkg-config: naemon
+#cgo CFLAGS: -DNAEMON -I.
+#cgo pkg-config: naemon
 
 #include "../dependencies.h"
 
 */
 import "C"
+
 import (
 	"unsafe"
 )
 
-//HostCheck host check structure
+// HostCheck host check structure
 type HostCheck struct {
 	Process
 	HostName       string
@@ -44,7 +39,7 @@ type HostCheck struct {
 	ObjectPtr      unsafe.Pointer
 }
 
-//CastHostCheck tries to cast the pointer to an go struct
+// CastHostCheck tries to cast the pointer to an go struct
 func CastHostCheck(data unsafe.Pointer) HostCheck {
 	st := *((*C.struct_nebstruct_host_check_struct)(data))
 	return HostCheck{

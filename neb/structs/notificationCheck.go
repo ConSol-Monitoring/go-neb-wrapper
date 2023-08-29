@@ -2,46 +2,41 @@ package structs
 
 /*
 
-#cgo nagios3 CFLAGS: -DNAGIOS3 -I. -I${SRCDIR}/../../libs
-#cgo nagios3 LDFLAGS: -Wl,-unresolved-symbols=ignore-all
-
-#cgo nagios4 CFLAGS: -DNAGIOS4 -I. -I${SRCDIR}/../../libs
-#cgo nagios4 LDFLAGS: -Wl,-unresolved-symbols=ignore-all
-
-#cgo naemon CFLAGS: -DNAEMON -I.
-#cgo naemon pkg-config: naemon
+#cgo CFLAGS: -DNAEMON -I.
+#cgo pkg-config: naemon
 
 #include "../dependencies.h"
 
 */
 import "C"
+
 import (
 	"unsafe"
 )
 
 const (
-	//NotificationNormal notification reason
+	// NotificationNormal notification reason
 	NotificationNormal = C.NOTIFICATION_NORMAL
-	//NotificationAcknowledgement notification reason
+	// NotificationAcknowledgement notification reason
 	NotificationAcknowledgement = C.NOTIFICATION_ACKNOWLEDGEMENT
-	//NotificationFlappingstart notification reason
+	// NotificationFlappingstart notification reason
 	NotificationFlappingstart = C.NOTIFICATION_FLAPPINGSTART
-	//NotificationFlappingstop notification reason
+	// NotificationFlappingstop notification reason
 	NotificationFlappingstop = C.NOTIFICATION_FLAPPINGSTOP
-	//NotificationFlappingdisabled notification reason
+	// NotificationFlappingdisabled notification reason
 	NotificationFlappingdisabled = C.NOTIFICATION_FLAPPINGDISABLED
-	//NotificationDowntimestart notification reason
+	// NotificationDowntimestart notification reason
 	NotificationDowntimestart = C.NOTIFICATION_DOWNTIMESTART
-	//NotificationDowntimeend notification reason
+	// NotificationDowntimeend notification reason
 	NotificationDowntimeend = C.NOTIFICATION_DOWNTIMEEND
-	//NotificationDowntimecancelled notification reason
+	// NotificationDowntimecancelled notification reason
 	NotificationDowntimecancelled = C.NOTIFICATION_DOWNTIMECANCELLED
-	//NotificationCustom notification reason
+	// NotificationCustom notification reason
 	NotificationCustom = C.NOTIFICATION_CUSTOM
 
-	//HostNotification notification type
+	// HostNotification notification type
 	HostNotification = C.HOST_NOTIFICATION
-	//ServiceNotification notification type
+	// ServiceNotification notification type
 	ServiceNotification = C.SERVICE_NOTIFICATION
 )
 
@@ -62,7 +57,7 @@ var notificationTypeMapping = map[int]string{
 	ServiceNotification: "ServiceNotification",
 }
 
-//NotificationCheck notification check structure
+// NotificationCheck notification check structure
 type NotificationCheck struct {
 	Process
 	NotificationType   int
@@ -80,7 +75,7 @@ type NotificationCheck struct {
 	ObjectPtr          unsafe.Pointer
 }
 
-//CastNotificationCheck tries to cast the pointer to an go struct
+// CastNotificationCheck tries to cast the pointer to an go struct
 func CastNotificationCheck(data unsafe.Pointer) NotificationCheck {
 	st := *((*C.struct_nebstruct_notification_struct)(data))
 	return NotificationCheck{

@@ -5,14 +5,8 @@ package neb
  */
 
 /*
-#cgo nagios3 CFLAGS: -DNAGIOS3 -I. -I${SRCDIR}/../libs
-#cgo nagios3 LDFLAGS: -Wl,-unresolved-symbols=ignore-all
-
-#cgo nagios4 CFLAGS: -DNAGIOS4 -I. -I${SRCDIR}/../libs
-#cgo nagios4 LDFLAGS: -Wl,-unresolved-symbols=ignore-all
-
-#cgo naemon CFLAGS: -DNAEMON -I.
-#cgo naemon pkg-config: naemon
+#cgo CFLAGS: -DNAEMON -I.
+#cgo pkg-config: naemon
 
 #include "neb_wrapper.h"
 
@@ -29,12 +23,12 @@ void DeregisterCallback(int type, void*callback) {
 */
 import "C"
 
-//RegisterGenericCallback capsules the c function neb_register_callback and passes the generic_callback handler
+// RegisterGenericCallback capsules the c function neb_register_callback and passes the generic_callback handler
 func RegisterGenericCallback(callbacktype int64) {
 	C.RegisterCallback(C.int(callbacktype), C.generic_callback)
 }
 
-//DeregisterGenericCallback capsules the c function neb_deregister_callback and passes the generic_callback handler
+// DeregisterGenericCallback capsules the c function neb_deregister_callback and passes the generic_callback handler
 func DeregisterGenericCallback(callbacktype int64) {
 	C.DeregisterCallback(C.int(callbacktype), C.generic_callback)
 }

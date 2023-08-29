@@ -8,7 +8,7 @@ go-naemon-broker-module
 What is this
 ============
 
-This is an NEB module API for [Naemon](http://www.naemon.io)  / Nagios written in Golang. This allows you to write NEB modules in Golang, which is otherwise only possible in C / C++.
+This is an NEB module API for [Naemon](http://www.naemon.io) written in Golang. This allows you to write NEB modules in Golang, which is otherwise only possible in C / C++.
 
 It is using CGo therefor this is not plain Go, there you have to be careful, if you want to write a module.
 
@@ -16,9 +16,6 @@ It is using CGo therefor this is not plain Go, there you have to be careful, if 
 
 This API works with:
 - Naemon
-- Nagios 4
-
-Nagios 3 and Icinga 1 are only working **without** the daemon mode!
 
 # Minimalistic-Example
 [main.go](https://github.com/ConSol-Monitoring/go-neb-wrapper/blob/master/main.go)
@@ -32,13 +29,7 @@ If you have written a module yourself, let us know.
 
 # Build
 
-The module has to be compiled as shared library so Nagios can load it.
+The module has to be compiled as shared library so Naemon can load it.
 
 Naemon:
-- go build -tags naemon -buildmode=c-shared -ldflags "-s -w"
-
-Nagios 3:
-- go build -tags nagios3 -buildmode=c-shared -ldflags "-s -w"
-
-Nagios 4:
-- go build -tags nagios4 -buildmode=c-shared -ldflags "-s -w"
+- go build -buildmode=c-shared -ldflags "-s -w"

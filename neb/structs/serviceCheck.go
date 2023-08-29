@@ -2,24 +2,19 @@ package structs
 
 /*
 
-#cgo nagios3 CFLAGS: -DNAGIOS3 -I. -I${SRCDIR}/../../libs
-#cgo nagios3 LDFLAGS: -Wl,-unresolved-symbols=ignore-all
-
-#cgo nagios4 CFLAGS: -DNAGIOS4 -I. -I${SRCDIR}/../../libs
-#cgo nagios4 LDFLAGS: -Wl,-unresolved-symbols=ignore-all
-
-#cgo naemon CFLAGS: -DNAEMON -I.
-#cgo naemon pkg-config: naemon
+#cgo CFLAGS: -DNAEMON -I.
+#cgo pkg-config: naemon
 
 #include "../dependencies.h"
 
 */
 import "C"
+
 import (
 	"unsafe"
 )
 
-//ServiceCheck service check structure
+// ServiceCheck service check structure
 type ServiceCheck struct {
 	Process
 	Service
@@ -41,7 +36,7 @@ type ServiceCheck struct {
 	ObjectPtr      unsafe.Pointer
 }
 
-//CastServiceCheck tries to cast the pointer to an go struct
+// CastServiceCheck tries to cast the pointer to an go struct
 func CastServiceCheck(data unsafe.Pointer) ServiceCheck {
 	st := *((*C.struct_nebstruct_service_check_struct)(data))
 	return ServiceCheck{

@@ -2,40 +2,35 @@ package structs
 
 /*
 
-#cgo nagios3 CFLAGS: -DNAGIOS3 -I. -I${SRCDIR}/../../libs
-#cgo nagios3 LDFLAGS: -Wl,-unresolved-symbols=ignore-all
-
-#cgo nagios4 CFLAGS: -DNAGIOS4 -I. -I${SRCDIR}/../../libs
-#cgo nagios4 LDFLAGS: -Wl,-unresolved-symbols=ignore-all
-
-#cgo naemon CFLAGS: -DNAEMON -I.
-#cgo naemon pkg-config: naemon
+#cgo CFLAGS: -DNAEMON -I.
+#cgo pkg-config: naemon
 
 #include "../dependencies.h"
 
 */
 import "C"
+
 import (
 	"fmt"
 	"strings"
 	"unsafe"
 )
 
-//MetaHostAndServiceList is a list of MetaHostAndService
+// MetaHostAndServiceList is a list of MetaHostAndService
 type MetaHostAndServiceList []MetaHostAndService
 
-//MetaHostAndService contains data for host and service
+// MetaHostAndService contains data for host and service
 type MetaHostAndService struct {
 	DisplayName              string
 	ChecksEnabled            int
 	CheckType                int
 	IsFlapping               int
-	CurrentState             int //0: up, 1: down, 2: unreachable. See stateTypes
+	CurrentState             int // 0: up, 1: down, 2: unreachable. See stateTypes
 	ScheduledDowntimeDepth   int
 	PendingFlexDowntimeDepth int
 }
 
-//MetaType is needed to differentiate the void pointer in the constructor
+// MetaType is needed to differentiate the void pointer in the constructor
 type MetaType int
 
 const (
@@ -43,7 +38,7 @@ const (
 	MetaService
 )
 
-//CastMetaHostAndService tries to cast the pointer to an go struct
+// CastMetaHostAndService tries to cast the pointer to an go struct
 func CastMetaHostAndService(data unsafe.Pointer, typ MetaType) MetaHostAndService {
 	switch typ {
 	case MetaHost:

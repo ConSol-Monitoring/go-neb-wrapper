@@ -14,7 +14,7 @@ var stateTypeMapping = map[int]string{
 	Unreachable: "Unreachable",
 }
 
-//StateTypeToString returns an string represent for the const
+// StateTypeToString returns an string represent for the const
 func StateTypeToString(stateType int) string {
 	if str, ok := stateTypeMapping[stateType]; ok {
 		return str

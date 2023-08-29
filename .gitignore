@@ -4,3 +4,4 @@ go-neb-wrapper.h
 vendor/
 _obj
 *iml
+tools/

@@ -2,14 +2,8 @@ package neb
 
 /*
 
-#cgo nagios3 CFLAGS: -DNAGIOS3 -I. -I${SRCDIR}/../libs
-#cgo nagios3 LDFLAGS: -Wl,-unresolved-symbols=ignore-all
-
-#cgo nagios4 CFLAGS: -DNAGIOS4 -I. -I${SRCDIR}/../libs
-#cgo nagios4 LDFLAGS: -Wl,-unresolved-symbols=ignore-all
-
-#cgo naemon CFLAGS: -DNAEMON -I.
-#cgo naemon pkg-config: naemon
+#cgo CFLAGS: -DNAEMON -I.
+#cgo pkg-config: naemon
 
 #include "dependencies.h"
 
@@ -18,9 +12,11 @@ extern struct service *service_list;
 
 */
 import "C"
+
 import (
-	"github.com/ConSol/go-neb-wrapper/neb/structs"
 	"unsafe"
+
+	"github.com/ConSol-Monitoring/go-neb-wrapper/neb/structs"
 )
 
 func GetHosts() structs.HostList {
