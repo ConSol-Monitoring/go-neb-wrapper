@@ -2,48 +2,50 @@
 
 MAKE:=make
 SHELL:=bash
-GOVERSION:=$(shell go version | awk '{print $$3}' | sed 's/^go\([0-9]\.[0-9]\).*/\1/')
+GOVERSION:=$(shell \
+    go version | \
+    awk -F'go| ' '{ split($$5, a, /\./); printf ("%04d%04d", a[1], a[2]); exit; }' \
+)
+# also update README.md when changing minumum version
+MINGOVERSION:=00010019
+MINGOVERSIONSTR:=1.19
+BUILD:=$(shell git rev-parse --short HEAD)
 
-all: deps fmt build_naemon
+.PHONY: vendor
 
-deps: versioncheck dump
+all: build_naemon
+
+tools: versioncheck vendor dump
+	go mod download
+	go mod tidy
+	go mod vendor
 
 updatedeps: versioncheck
+	$(MAKE) clean
+	go mod download
+	go get -u ./...
+	go get -t -u ./...
+	go mod tidy
 
-dump:
-#	if [ $(shell grep -rc Dump *.go | grep -v :0 | grep -v dump.go | wc -l) -ne 0 ]; then \
-#		go get github.com/davecgh/go-spew/spew; \
-#		sed -i.bak 's/\/\/ +build.*/\/\/ build with debug functions/' dump.go; \
-#	else \
-#		sed -i.bak 's/\/\/ build.*/\/\/ +build ignore/' dump.go; \
-#	fi
-#	rm -f dump.go.bak
+vendor:
+	go mod download
+	go mod tidy
+	go mod vendor
 
-build_naemon: dump
-	go build -tags naemon -buildmode=c-shared -ldflags "-s -w -X main.Build=$(shell git rev-parse --short HEAD)"
+build_naemon: vendor
+	go build -tags naemon -buildmode=c-shared -ldflags "-s -w -X main.Build=$(BUILD)"
 
-build_nagios3: dump
-	go build -tags nagios3 -buildmode=c-shared -ldflags "-s -w -X main.Build=$(shell git rev-parse --short HEAD)"
+build_nagios3: vendor
+	go build -tags nagios3 -buildmode=c-shared -ldflags "-s -w -X main.Build=$(BUILD)"
 
-build_nagios4: dump
-	go build -tags nagios4 -buildmode=c-shared -ldflags "-s -w -X main.Build=$(shell git rev-parse --short HEAD)"
+build_nagios4: vendor
+	go build -tags nagios4 -buildmode=c-shared -ldflags "-s -w -X main.Build=$(BUILD)"
 
-debugbuild: deps fmt
-	go build -buildmode=c-shared -race -ldflags "-X main.Build=$(shell git rev-parse --short HEAD)"
-
-test: fmt dump
-	go test -short -v
-	if grep -r TODO: *.go; then exit 1; fi
-
-citest: deps
-	#
-	# Normal test cases
-	#
+test: fmt dump vendor
 	go test -v
-	#
-	# Benchmark tests
-	#
-	go test -v -bench=B\* -run=^$$ . -benchmem
+	if grep -rn TODO: *.go; then exit 1; fi
+
+citest: vendor
 	#
 	# Checking gofmt errors
 	#
@@ -55,16 +57,30 @@ citest: deps
 	#
 	# Checking TODO items
 	#
-	if grep -r TODO: *.go; then exit 1; fi
-	$(MAKE) lint
-	$(MAKE) cyclo
-	$(MAKE) mispell
+	if grep -rn TODO: *.go; then exit 1; fi
+	# Run other subtests
+	#
+	$(MAKE) golangci
+	$(MAKE) fmt
+	#
+	# Normal test cases
+	#
+	go test -v
+	#
+	# Benchmark tests
+	#
+	go test -v -bench=B\* -run=^$$ . -benchmem
+	#
+	# Race rondition tests
+	#
+	$(MAKE) racetest
 	#
 	# All CI tests successfull
 	#
+	go mod tidy
 
 benchmark: fmt
-	go test -v -bench=B\* -run=^$$ . -benchmem
+	go test -ldflags "-s -w -v -bench=B\* -benchtime 10s -run=^$$ . -benchmem
 
 racetest: fmt
 	go test -race -v
@@ -79,51 +95,28 @@ coverweb: fmt
 	go tool cover -html=cover.out
 
 clean:
-	# TODO: ...
-	rm -f cover.out
-	rm -f coverage.html
+	rm -rf vendor
 
 fmt:
-	go get golang.org/x/tools/cmd/goimports
 	goimports -w .
-	go tool vet -all -shadow -assign -atomic -bool -composites -copylocks -nilfunc -rangeloops -unsafeptr -unreachable .
+	go vet -all -assign -atomic -bool -composites -copylocks -nilfunc -rangeloops -unsafeptr -unreachable .
 	gofmt -w -s .
 
 versioncheck:
-	@[ "$(GOVERSION)" = "devel" ] || [ $$(echo "$(GOVERSION)" | tr -d ".") -ge 15 ] || { \
+	@[ $$( printf '%s\n' $(GOVERSION) $(MINGOVERSION) | sort | head -n 1 ) = $(MINGOVERSION) ] || { \
 		echo "**** ERROR:"; \
-		echo "**** Naemon_neb requires at least golang version 1.5 or higher"; \
+		echo "**** go-neb-wrapper requires at least golang version $(MINGOVERSIONSTR) or higher"; \
 		echo "**** this is: $$(go version)"; \
 		exit 1; \
 	}
 
-lint:
+golangci: tools
 	#
-	# Check if golint complains
-	# see https://github.com/golang/lint/ for details.
-	# Only works with Go 1.6 or up.
+	# golangci combines a few static code analyzer
+	# See https://github.com/golangci/golangci-lint
 	#
-	@( [ "$(GOVERSION)" != "devel" ] && [ $$(echo "$(GOVERSION)" | tr -d ".") -lt 16 ] ) || { \
-		go get github.com/golang/lint/golint; \
-		golint -set_exit_status ./...; \
-	}
+	golangci-lint run ./...
 
-cyclo:
-	go get github.com/fzipp/gocyclo
-	#
-	# Check if there are any too complicated functions
-	# Any function with a score higher than 15 is bad.
-	# See https://github.com/fzipp/gocyclo for details.
-	#
-	gocyclo -over 15 .
-
-mispell:
-	go get github.com/client9/misspell/cmd/misspell
-	#
-	# Check if there are common spell errors.
-	# See https://github.com/client9/misspell
-	#
-	misspell -error .
 
 version:
 	OLDVERSION="$(shell grep "VERSION =" main.go | awk '{print $$3}' | tr -d '"')"; \

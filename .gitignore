@@ -1,5 +1,6 @@
 go-neb-wrapper
 go-neb-wrapper.h
-.idea/
+*.swp
+vendor/
 _obj
 *iml
