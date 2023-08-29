@@ -100,12 +100,12 @@ func CastNotificationReasonToString(typ int) string {
 	if str, ok := notificationReasonMapping[typ]; ok {
 		return str
 	}
-	return "Unkown Reason"
+	return "Unknown Reason"
 }
 
 func CastNotificationTypeToString(typ int) string {
 	if str, ok := notificationTypeMapping[typ]; ok {
 		return str
 	}
-	return "Unkown Type"
+	return "Unknown Type"
 }
