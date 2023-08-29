@@ -1,6 +1,6 @@
 module github.com/ConSol-Monitoring/go-neb-wrapper
 
-go 1.20
+go 1.19
 
 require (
 	github.com/daixiang0/gci v0.11.0
